@@ -42,9 +42,9 @@ export default function TokenEditor( {
         }
     };
 
-    const setToken = ( key, next ) => {
+    const setToken = ( key, next, def ) => {
         const out = { ...value };
-        if ( next === '' || next == null || next === defaults[ key ] ) {
+        if ( next === '' || next == null || same( next, defaults[ key ], def ) ) {
             clearToken( out, key );
         } else {
             out[ key ] = String( next );
@@ -72,8 +72,8 @@ export default function TokenEditor( {
                             tokenKey={ key }
                             def={ def }
                             current={ value[ key ] ?? defaults[ key ] ?? '' }
-                            isOverridden={ value[ key ] !== undefined && value[ key ] !== base[ key ] }
-                            onChange={ ( v ) => setToken( key, v ) }
+                            isOverridden={ value[ key ] !== undefined && ! same( value[ key ], base[ key ], def ) }
+                            onChange={ ( v ) => setToken( key, v, def ) }
                             onReset={ () => resetToken( key ) }
                         />
                     ) ) }
@@ -81,6 +81,17 @@ export default function TokenEditor( {
             ) ) }
         </div>
     );
+}
+
+/**
+ * A hex colour means the same thing in either case, and the built-ins ship it
+ * uppercase where the colour control writes it lowercase. Everything else is
+ * compared as stored: a font stack's case is the author's.
+ */
+function same( a, b, def ) {
+    if ( def?.control !== 'color' ) return a === b;
+
+    return String( a ?? '' ).toLowerCase() === String( b ?? '' ).toLowerCase();
 }
 
 function TokenRow( { tokenKey, def, current, isOverridden, onChange, onReset } ) {
