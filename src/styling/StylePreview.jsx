@@ -157,13 +157,17 @@ export function resolveEffectiveTokens( props = {} ) {
  * The map the page will paint: the authored cascade plus the derivations the
  * server applies on the way out, so the preview cannot promise a colour the
  * published page does not use.
+ *
+ * A surface that does not paint --fundkit-bg passes paintsGround: false: ink
+ * measured against a ground it never draws lands on whatever it draws instead.
  */
 export function resolveEffectiveStyle( props = {} ) {
+    const { paintsGround = true } = props;
     const { defaults, presetTokens, inline, layers } = cascade( props );
     const tokens = { ...defaults, ...presetTokens, ...inline };
 
     dropStalePairs( tokens, layers, defaults );
-    inkFollowsGround( tokens, presetTokens, inline, defaults );
+    if ( paintsGround ) inkFollowsGround( tokens, presetTokens, inline, defaults );
 
     return { ...tokensToStyle( tokens ), ...derivedInk( tokens ) };
 }

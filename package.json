@@ -1,6 +1,6 @@
 {
   "name": "@fundkit/ui",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "FundKit design system \u2014 shared admin UI components, tokens, and widgets.",
   "license": "GPL-2.0-or-later",
   "repository": {

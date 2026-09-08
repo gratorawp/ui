@@ -30,6 +30,9 @@ export function rgb( value ) {
         return [ parseInt( h.slice( 0, 2 ), 16 ), parseInt( h.slice( 2, 4 ), 16 ), parseInt( h.slice( 4, 6 ), 16 ) ];
     }
 
+    const hsl = v.match( /^hsla?\(([^)]*)\)$/i );
+    if ( hsl ) return fromHsl( hsl[ 1 ] );
+
     const fn = v.match( /^rgba?\(([^)]*)\)$/i );
     if ( fn ) {
         const parts = fn[ 1 ].split( /[\s,/]+/ ).filter( Boolean ).slice( 0, 3 );
@@ -37,13 +40,48 @@ export function rgb( value ) {
         const out = parts.map( ( p ) => {
             const n = parseFloat( p );
             if ( Number.isNaN( n ) ) return null;
-            return Math.round( p.includes( '%' ) ? n * 2.55 : n );
+            return channel( p.includes( '%' ) ? n * 2.55 : n );
         } );
 
         return out.some( ( n ) => n === null ) ? null : out;
     }
 
     return null;
+}
+
+/** PHP's round() corrects representation error before it rounds; Math.round does not. */
+function channel( n ) {
+    return Math.round( Number( n.toPrecision( 15 ) ) );
+}
+
+const NUMERIC = /^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/;
+
+/**
+ * A theme.json palette states its colours in whatever CSS accepts, and a ground
+ * nothing can read leaves every derived ink at its stylesheet fallback.
+ */
+function fromHsl( parts ) {
+    const bits = parts.split( /[\s,/]+/ ).filter( Boolean ).slice( 0, 3 );
+    if ( bits.length < 3 ) return null;
+
+    const bare = bits.map( ( b ) => b.replace( /[%deg]+$/, '' ) );
+    if ( ! bare.every( ( b ) => NUMERIC.test( b ) ) ) return null;
+
+    const num = bare.map( Number );
+
+    let h = num[ 0 ] % 360;
+    if ( h < 0 ) h += 360;
+    const s = Math.max( 0, Math.min( 100, num[ 1 ] ) ) / 100;
+    const l = Math.max( 0, Math.min( 100, num[ 2 ] ) ) / 100;
+
+    const c = ( 1 - Math.abs( 2 * l - 1 ) ) * s;
+    const x = c * ( 1 - Math.abs( ( ( h / 60 ) % 2 ) - 1 ) );
+    const m = l - c / 2;
+
+    return [
+        [ c, x, 0 ], [ x, c, 0 ], [ 0, c, x ],
+        [ 0, x, c ], [ x, 0, c ], [ c, 0, x ],
+    ][ Math.floor( h / 60 ) % 6 ].map( ( n ) => channel( ( n + m ) * 255 ) );
 }
 
 export function luminance( value ) {
