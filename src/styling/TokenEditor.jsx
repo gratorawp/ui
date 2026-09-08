@@ -4,15 +4,21 @@
  *
  * Pure / prop-driven: pass `catalogue`, `groups`, and `defaults` explicitly.
  * The FundKit plugin sources these from window.fundkit.styling and passes them in.
+ *
+ * `base` is the layer beneath `value` when `value` carries that layer too, as a
+ * brand preset's token map does. A key equal to its base is not an override, so
+ * it offers no Reset, and Reset restores the base value rather than dropping to
+ * the catalogue default.
  */
 
 import { PanelBody, RangeControl, SelectControl, TextControl, Button } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import ColorInput from '../components/ColorInput';
 
 export default function TokenEditor( {
     value = {},
     defaults = {},
+    base = {},
     onChange,
     catalogue = {},
     groups = {},
@@ -28,10 +34,18 @@ export default function TokenEditor( {
         if ( ! orderedGroups.includes( g ) ) orderedGroups.push( g );
     }
 
+    const clearToken = ( out, key ) => {
+        if ( base[ key ] !== undefined ) {
+            out[ key ] = base[ key ];
+        } else {
+            delete out[ key ];
+        }
+    };
+
     const setToken = ( key, next ) => {
         const out = { ...value };
         if ( next === '' || next == null || next === defaults[ key ] ) {
-            delete out[ key ];
+            clearToken( out, key );
         } else {
             out[ key ] = String( next );
         }
@@ -40,7 +54,7 @@ export default function TokenEditor( {
 
     const resetToken = ( key ) => {
         const out = { ...value };
-        delete out[ key ];
+        clearToken( out, key );
         onChange( out );
     };
 
@@ -58,7 +72,7 @@ export default function TokenEditor( {
                             tokenKey={ key }
                             def={ def }
                             current={ value[ key ] ?? defaults[ key ] ?? '' }
-                            isOverridden={ value[ key ] !== undefined }
+                            isOverridden={ value[ key ] !== undefined && value[ key ] !== base[ key ] }
                             onChange={ ( v ) => setToken( key, v ) }
                             onReset={ () => resetToken( key ) }
                         />
@@ -100,16 +114,36 @@ function TokenRow( { tokenKey, def, current, isOverridden, onChange, onReset } )
 function TokenControl( { def, value, onChange } ) {
     switch ( def.control ) {
         case 'color':
-            return <ColorInput value={ value } onChange={ onChange } />;
+            return <ColorInput value={ value } onChange={ onChange } label={ def.label } />;
 
         case 'range': {
-            const numeric = parsePixels( value );
+            const literal = String( value ?? '' ).trim();
+            const min = def.min ?? 0;
+            const max = def.max ?? 32;
+
+            if ( literal !== '' && ! slidable( literal, min, max ) ) {
+                return (
+                    <TextControl
+                        value={ literal }
+                        onChange={ onChange }
+                        help={ sprintf(
+                            /* translators: 1: smallest pixel size the slider offers, 2: the largest */
+                            __( 'The slider reads whole pixels from %1$spx to %2$spx. Type a size in that range to use it.', 'fundkit-fundraising-campaigns' ),
+                            min,
+                            max
+                        ) }
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                );
+            }
+
             return (
                 <RangeControl
-                    value={ numeric }
+                    value={ literal === '' ? 0 : parseFloat( literal ) }
                     onChange={ ( v ) => onChange( `${ v ?? 0 }px` ) }
-                    min={ def.min ?? 0 }
-                    max={ def.max ?? 32 }
+                    min={ min }
+                    max={ max }
                     step={ def.step ?? 1 }
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
@@ -157,7 +191,20 @@ function TokenControl( { def, value, onChange } ) {
     }
 }
 
-function parsePixels( v ) {
-    const n = parseFloat( String( v ).replace( /[^0-9.-]/g, '' ) );
-    return Number.isFinite( n ) ? n : 0;
+/**
+ * Whether the slider can hold this value and give it back unchanged. Shared so
+ * anything that wants to say a value is unshown asks the same question the
+ * control asks.
+ *
+ * @param {string} literal the stored value
+ * @param {number} min     the slider's floor
+ * @param {number} max     the slider's ceiling
+ * @return {boolean} true when the slider represents it exactly.
+ */
+export function slidable( literal, min = 0, max = 32 ) {
+    const m = /^(-?\d+(?:\.\d+)?)px$/.exec( String( literal ?? '' ).trim() );
+    if ( ! m ) return false;
+    const n = parseFloat( m[ 1 ] );
+
+    return n >= min && n <= max;
 }

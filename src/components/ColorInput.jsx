@@ -1,9 +1,12 @@
 /**
  * Shared color input. Renders a swatch + hex label that opens the WP
- * ColorPicker in a popover when clicked.
+ * ColorPicker in a popover when clicked, beside a button that empties it.
  */
 
 import { ColorPicker, Dropdown } from '@wordpress/components';
+import { __, sprintf } from '@wordpress/i18n';
+
+import Icon from './Icon';
 
 export default function ColorInput( { value, onChange, label } ) {
     const current = String( value || '' );
@@ -13,24 +16,42 @@ export default function ColorInput( { value, onChange, label } ) {
             contentClassName="fundkit-color-picker-popover"
             popoverProps={ { placement: 'bottom-start' } }
             renderToggle={ ( { isOpen, onToggle } ) => (
-                <button
-                    type="button"
-                    className="fundkit-color"
-                    onClick={ onToggle }
-                    aria-expanded={ isOpen }
-                    aria-label={ label || current || 'Pick a color' }
-                >
-                    <span
-                        className="fundkit-color__swatch"
-                        style={ { background: current || 'transparent' } }
-                        aria-hidden="true"
-                    />
+                <span className="fundkit-color-control">
+                    <button
+                        type="button"
+                        className="fundkit-color"
+                        onClick={ onToggle }
+                        aria-expanded={ isOpen }
+                        aria-label={ label || current || __( 'Pick a color', 'fundkit-fundraising-campaigns' ) }
+                    >
+                        <span
+                            className="fundkit-color__swatch"
+                            style={ { background: current || 'transparent' } }
+                            aria-hidden="true"
+                        />
+                        { current && (
+                            <span className="fundkit-color__hex">
+                                { current.toUpperCase() }
+                            </span>
+                        ) }
+                    </button>
                     { current && (
-                        <span className="fundkit-color__hex">
-                            { current.toUpperCase() }
-                        </span>
+                        <button
+                            type="button"
+                            className="fundkit-color__clear"
+                            onClick={ () => onChange( '' ) }
+                            aria-label={ label
+                                ? sprintf(
+                                    /* translators: %s: what the colour is for, e.g. Button background */
+                                    __( 'Clear %s', 'fundkit-fundraising-campaigns' ),
+                                    label
+                                )
+                                : __( 'Clear color', 'fundkit-fundraising-campaigns' ) }
+                        >
+                            <Icon name="close" size={ 14 } aria-hidden="true" />
+                        </button>
                     ) }
-                </button>
+                </span>
             ) }
             renderContent={ () => (
                 <ColorPicker

@@ -7,6 +7,11 @@
     gap: 8px;
 
     &__frame {
+        // What the resolver drops, the stylesheet derives, as the donation form
+        // does. Literal first for a browser without color-mix.
+        --fundkit-accent-soft: #efedf8;
+        --fundkit-accent-soft: color-mix(in srgb, var(--fundkit-accent, #211d3f) 12%, var(--fundkit-bg, #fff));
+
         background: #fff;
         border: 1px solid #eef0f2;
         border-radius: 12px;
@@ -56,8 +61,8 @@
     &__page {
         background: var(--fundkit-bg, #fff);
         color: var(--fundkit-text, #111827);
-        font-family: var(--fundkit-font-family, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
-        font-size: var(--fundkit-font-size, 15px);
+        font-family: var(--fundkit-typeface, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+        font-size: var(--fundkit-type-size, 15px);
         font-weight: var(--fundkit-body-weight, 400);
     }
 
@@ -92,7 +97,7 @@
         letter-spacing: -0.01em;
         z-index: 2;
         text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
-        font-family: var(--fundkit-font-family, inherit);
+        font-family: var(--fundkit-typeface, inherit);
     }
 
     &__body {
@@ -114,7 +119,7 @@
     &__progress-track {
         height: 6px;
         background: var(--fundkit-bg-soft, #eef0f2);
-        border: var(--fundkit-border-width, 0) solid var(--fundkit-border, transparent);
+        border: var(--fundkit-stroke, 0) solid var(--fundkit-border, transparent);
         border-radius: var(--fundkit-radius-sm, 3px);
         overflow: hidden;
         margin-bottom: 6px;
@@ -149,12 +154,12 @@
 
     &__amount {
         padding: 8px 0;
-        border: var(--fundkit-border-width, 1px) solid var(--fundkit-border, #e5e7eb);
+        border: var(--fundkit-stroke, 1px) solid var(--fundkit-border, #e5e7eb);
         border-radius: var(--fundkit-radius-sm, 6px);
-        background: var(--fundkit-bg, #fff);
+        background: var(--fundkit-bg-soft, #f8fafb);
         text-align: center;
         font-size: 12px;
-        color: var(--fundkit-text, #111827);
+        color: var(--fundkit-on-soft, var(--fundkit-text, #111827));
         font-weight: 500;
         transition: background .2s ease, border-color .2s ease;
 
@@ -166,6 +171,49 @@
         }
     }
 
+    // Fields keep a ground of their own, so a coloured page does not paint the
+    // boxes a donor types in.
+    &__fields {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--fundkit-field-gap, 4px);
+    }
+
+    &__field-label {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--fundkit-text-muted, #6b7280);
+    }
+
+    &__field-box {
+        padding: 8px 10px;
+        border: var(--fundkit-stroke, 1px) solid var(--fundkit-border, #e5e7eb);
+        border-radius: var(--fundkit-radius-sm, 6px);
+        background: var(--fundkit-field-bg, #fff);
+        color: var(--fundkit-on-field, var(--fundkit-text, #111827));
+        font-size: 12px;
+        line-height: 1.4;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &--amount {
+            font-variant-numeric: tabular-nums;
+        }
+
+        &.is-focus {
+            border-color: var(--fundkit-focus-ring, var(--fundkit-accent, #211d3f));
+            box-shadow: 0 0 0 3px var(--fundkit-accent-soft, #efedf8);
+        }
+    }
+
     &__cta {
         width: 100%;
         padding: 10px 0;
@@ -174,7 +222,7 @@
         // (Quiet's outline button, future presets) preview accurately. The
         // accent stays as the fallback for filled-style presets.
         background: var(--fundkit-button-bg, var(--fundkit-accent, #211d3f));
-        color: var(--fundkit-button-fg, #fff);
+        color: var(--fundkit-button-fg, var(--fundkit-on-accent, #fff));
         border: var(--fundkit-button-border, 0);
         border-radius: var(--fundkit-button-radius, var(--fundkit-radius-sm, 6px));
         font-size: 13px;

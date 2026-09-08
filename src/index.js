@@ -51,7 +51,7 @@ export { default as DashboardSectionBar, RANGE_OPTIONS } from './widgets/Section
 export * from './widgets/icons';
 
 /* -------------------------------------------------------------------- styling */
-export { default as StylePreview, resolveEffectiveTokens } from './styling/StylePreview';
+export { default as StylePreview, resolveEffectiveTokens, resolveEffectiveStyle } from './styling/StylePreview';
 export { default as TokenEditor } from './styling/TokenEditor';
 
 /* ---------------------------------------------------------------------- utils */
