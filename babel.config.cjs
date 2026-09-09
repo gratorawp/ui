@@ -10,7 +10,7 @@ const addJsExtension = () => {
         s.value = `${ s.value }.js`;
     };
     return {
-        name: 'fundkit-add-js-extension',
+        name: 'gratora-add-js-extension',
         visitor: {
             ImportDeclaration: ( p ) => fix( p.node ),
             ExportNamedDeclaration: ( p ) => fix( p.node ),

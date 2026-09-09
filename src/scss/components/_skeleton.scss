@@ -1,12 +1,12 @@
 // Skeleton placeholders. Used by MetricCard while widgets are loading, and
 // available anywhere else that wants a shimmer block.
 
-@keyframes fundkit-skeleton-pulse {
+@keyframes gratora-skeleton-pulse {
     0%   { background-position:   0% 0%; }
     100% { background-position: -200% 0%; }
 }
 
-.fundkit-skeleton {
+.gratora-skeleton {
     display: inline-block;
     width: 80px;
     height: 14px;
@@ -18,8 +18,8 @@
         $bg-soft 80%
     );
     background-size: 200% 100%;
-    animation: fundkit-skeleton-pulse 1.4s ease-in-out infinite;
+    animation: gratora-skeleton-pulse 1.4s ease-in-out infinite;
 }
 
-.fundkit-skeleton--lg { width: 140px; height: 22px; }
-.fundkit-skeleton--sm { width: 48px;  height: 10px; }
+.gratora-skeleton--lg { width: 140px; height: 22px; }
+.gratora-skeleton--sm { width: 48px;  height: 10px; }

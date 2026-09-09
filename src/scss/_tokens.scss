@@ -1,4 +1,4 @@
-// FundKit admin design tokens. Single source of truth.
+// Gratora admin design tokens. Single source of truth.
 
 // Brand colours
 $accent:         #211d3f;  // Primary brand indigo. Buttons, focus rings, active states.
@@ -92,32 +92,32 @@ $font-mono:      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospac
 
 // Colours mirrored on :root for runtime theming; spacing/radius stay SCSS-only.
 :root {
-    --fundkit-color-accent:        #{$accent};
-    --fundkit-color-accent-dark:   #{$accent-dark};
-    --fundkit-color-accent-soft:   #{$accent-soft};
-    --fundkit-color-accent-tint:   #{$accent-tint};
+    --gratora-color-accent:        #{$accent};
+    --gratora-color-accent-dark:   #{$accent-dark};
+    --gratora-color-accent-soft:   #{$accent-soft};
+    --gratora-color-accent-tint:   #{$accent-tint};
 
-    --fundkit-color-text:          #{$text};
-    --fundkit-color-text-muted:    #{$text-muted};
-    --fundkit-color-text-soft:     #{$text-soft};
+    --gratora-color-text:          #{$text};
+    --gratora-color-text-muted:    #{$text-muted};
+    --gratora-color-text-soft:     #{$text-soft};
 
-    --fundkit-color-bg-page:       #{$bg-page};
-    --fundkit-color-bg-soft:       #{$bg-soft};
-    --fundkit-color-bg-card:       #{$bg-card};
+    --gratora-color-bg-page:       #{$bg-page};
+    --gratora-color-bg-soft:       #{$bg-soft};
+    --gratora-color-bg-card:       #{$bg-card};
 
-    --fundkit-color-border-mid:    #{$border-mid};
-    --fundkit-color-border-soft:   #{$border-soft};
+    --gratora-color-border-mid:    #{$border-mid};
+    --gratora-color-border-soft:   #{$border-soft};
 
-    --fundkit-color-amber:         #{$amber};
-    --fundkit-color-amber-soft:    #{$amber-soft};
-    --fundkit-color-red:           #{$red};
-    --fundkit-color-red-soft:      #{$red-soft};
-    --fundkit-color-blue:          #{$blue};
-    --fundkit-color-blue-soft:     #{$blue-soft};
+    --gratora-color-amber:         #{$amber};
+    --gratora-color-amber-soft:    #{$amber-soft};
+    --gratora-color-red:           #{$red};
+    --gratora-color-red-soft:      #{$red-soft};
+    --gratora-color-blue:          #{$blue};
+    --gratora-color-blue-soft:     #{$blue-soft};
 
-    --fundkit-shadow-sm:           #{$shadow-sm};
-    --fundkit-shadow-md:           #{$shadow-md};
-    --fundkit-shadow-lg:           #{$shadow-lg};
+    --gratora-shadow-sm:           #{$shadow-sm};
+    --gratora-shadow-md:           #{$shadow-md};
+    --gratora-shadow-lg:           #{$shadow-lg};
 }
 
 // Lucide icons are stroke-only (fill="none"). WP rules like

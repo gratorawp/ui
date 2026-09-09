@@ -1,6 +1,6 @@
 // Slider: connected card with range + number + unit.
 
-.fundkit-slider {
+.gratora-slider {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -96,8 +96,8 @@
     // Element-prefixed selector bumps specificity over WP admin's
     // `input[type=number]` and `input:focus` rules.
     &__input,
-    input.fundkit-slider__input,
-    input[type="number"].fundkit-slider__input {
+    input.gratora-slider__input,
+    input[type="number"].gratora-slider__input {
         appearance: textfield;
         -moz-appearance: textfield;
         width: 100%;

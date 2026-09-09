@@ -3,7 +3,7 @@
 @import '../tokens';
 
 // Above the WP admin bar/menu (~99999); see _drawer.scss for the literal.
-.fundkit-dialog-overlay {
+.gratora-dialog-overlay {
     position: fixed;
     inset: 0;
     background: rgba(15, 23, 42, .35);
@@ -14,7 +14,7 @@
     z-index: 100000;
 }
 
-.fundkit-dialog {
+.gratora-dialog {
     width: 520px;
     max-width: 100%;
     max-height: 90vh;

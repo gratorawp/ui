@@ -4,11 +4,11 @@
  */
 export default function Field( { label, help, footer, children } ) {
     return (
-        <div className="fundkit-field">
-            { label && <div className="fundkit-field__label">{ label }</div> }
-            { help  && <div className="fundkit-field__help">{ help }</div> }
+        <div className="gratora-field">
+            { label && <div className="gratora-field__label">{ label }</div> }
+            { help  && <div className="gratora-field__help">{ help }</div> }
             { children }
-            { footer && <div className="fundkit-field__footer">{ footer }</div> }
+            { footer && <div className="gratora-field__footer">{ footer }</div> }
         </div>
     );
 }

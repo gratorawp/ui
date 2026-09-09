@@ -3,10 +3,10 @@
  */
 export default function SectionBar( { title, sub, right } ) {
     return (
-        <div className="fundkit-section-bar">
+        <div className="gratora-section-bar">
             <h2>{ title }</h2>
             { ( sub || right ) && (
-                <div className="fundkit-section-bar__sub">{ right || sub }</div>
+                <div className="gratora-section-bar__sub">{ right || sub }</div>
             ) }
         </div>
     );

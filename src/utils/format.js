@@ -2,8 +2,8 @@ import { __, sprintf } from '@wordpress/i18n';
 
 // Read lazily so runtime overrides are picked up at call time, not module load.
 export function defaultCurrency() {
-    if ( typeof window !== 'undefined' && window.fundkit?.default_currency ) {
-        return String( window.fundkit.default_currency ).toUpperCase();
+    if ( typeof window !== 'undefined' && window.gratora?.default_currency ) {
+        return String( window.gratora.default_currency ).toUpperCase();
     }
     return 'USD';
 }
@@ -41,7 +41,7 @@ export function currencyDecimals( currency ) {
     return 2;
 }
 
-// Explicit override channel for surfaces with no window.fundkit (the public
+// Explicit override channel for surfaces with no window.gratora (the public
 // donation form gets its format from the server form config; page-cache safe).
 // Bootstrap calls setActiveNumberFormat(config.numberFormat) once; call sites
 // stay zero-arg everywhere.
@@ -61,8 +61,8 @@ export function numberFormat() {
     if ( activeOverride ) {
         return { ...DEFAULT_NUMBER_FORMAT, ...activeOverride };
     }
-    if ( typeof window !== 'undefined' && window.fundkit?.number_format ) {
-        return { ...DEFAULT_NUMBER_FORMAT, ...window.fundkit.number_format };
+    if ( typeof window !== 'undefined' && window.gratora?.number_format ) {
+        return { ...DEFAULT_NUMBER_FORMAT, ...window.gratora.number_format };
     }
     return DEFAULT_NUMBER_FORMAT;
 }
@@ -165,12 +165,12 @@ export function timeAgo( iso ) {
     const d = parseTimestamp( iso );
     if ( Number.isNaN( d.getTime() ) ) return iso;
     const diff = Math.max( 0, ( Date.now() - d.getTime() ) / 1000 );
-    if ( diff < 60 )      return __( 'just now', 'fundkit-fundraising-campaigns' );
+    if ( diff < 60 )      return __( 'just now', 'gratora-fundraising-campaigns' );
     /* translators: %d: number of minutes */
-    if ( diff < 3600 )    return sprintf( __( '%dm ago', 'fundkit-fundraising-campaigns' ),  Math.floor( diff / 60 ) );
+    if ( diff < 3600 )    return sprintf( __( '%dm ago', 'gratora-fundraising-campaigns' ),  Math.floor( diff / 60 ) );
     /* translators: %d: number of hours */
-    if ( diff < 86400 )   return sprintf( __( '%dh ago', 'fundkit-fundraising-campaigns' ),  Math.floor( diff / 3600 ) );
+    if ( diff < 86400 )   return sprintf( __( '%dh ago', 'gratora-fundraising-campaigns' ),  Math.floor( diff / 3600 ) );
     /* translators: %d: number of days */
-    if ( diff < 604800 )  return sprintf( __( '%dd ago', 'fundkit-fundraising-campaigns' ),  Math.floor( diff / 86400 ) );
+    if ( diff < 604800 )  return sprintf( __( '%dd ago', 'gratora-fundraising-campaigns' ),  Math.floor( diff / 86400 ) );
     return formatDate( iso );
 }

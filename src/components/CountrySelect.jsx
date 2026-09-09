@@ -22,7 +22,7 @@ export default function CountrySelect( { value, onChange, placeholder, disabled 
             value={ String( value || '' ).toUpperCase() }
             onChange={ onChange }
             options={ options }
-            placeholder={ placeholder || __( 'Search country…', 'fundkit-fundraising-campaigns' ) }
+            placeholder={ placeholder || __( 'Search country…', 'gratora-fundraising-campaigns' ) }
             disabled={ disabled }
             className={ className }
         />

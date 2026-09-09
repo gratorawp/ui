@@ -2,7 +2,7 @@
 
 @import '../tokens';
 
-.fundkit-form-row {
+.gratora-form-row {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: $space-5;
@@ -47,9 +47,9 @@
     }
 }
 
-.fundkit-input,
-.fundkit-textarea,
-.fundkit-select {
+.gratora-input,
+.gratora-textarea,
+.gratora-select {
     width: 100%;
     padding: 7px 10px;
     background: $bg-card;
@@ -68,69 +68,69 @@
 }
 
 // WordPress admin's `input[type=text]` (0,1,1) and `.wp-core-ui select` (0,1,1)
-// outrank the bare `.fundkit-input` / `.fundkit-select` classes (0,1,0), so at rest
+// outrank the bare `.gratora-input` / `.gratora-select` classes (0,1,0), so at rest
 // inputs and dropdowns fall back to WP's grey #949494 border, 2px corners and
 // dashicon arrow. Element-qualify to match that specificity; this sheet is
 // enqueued after wp-admin's forms.css so source order wins. The :focus and
 // --edited element bumps below (0,2,1) still win over these.
-input.fundkit-input {
+input.gratora-input {
     border: 1px solid $border-mid;
     border-radius: $radius-md;
     background: $bg-card;
     padding: 7px 10px;
 }
-input.fundkit-input--edited,
-select.fundkit-input--edited {
+input.gratora-input--edited,
+select.gratora-input--edited {
     border-color: $accent;
     box-shadow: inset 2px 0 0 $accent;
 }
 
-// Element selectors (input.fundkit-input) are intentional: they bump specificity
+// Element selectors (input.gratora-input) are intentional: they bump specificity
 // over WordPress admin's `input[type=text]:focus { ... }` (0,0,2,1) and
 // `select:focus`, which otherwise paint the wrong blue focus ring.
-input.fundkit-input:focus,
-button.fundkit-input:focus,
-select.fundkit-select:focus,
-textarea.fundkit-textarea:focus {
+input.gratora-input:focus,
+button.gratora-input:focus,
+select.gratora-select:focus,
+textarea.gratora-textarea:focus {
     outline: 0;
     border-color: $accent;
     box-shadow: 0 0 0 3px rgba($accent, .12);
 }
 
-input.fundkit-input--edited:focus,
-button.fundkit-input--edited:focus,
-textarea.fundkit-textarea--edited:focus {
+input.gratora-input--edited:focus,
+button.gratora-input--edited:focus,
+textarea.gratora-textarea--edited:focus {
     box-shadow: inset 2px 0 0 $accent, 0 0 0 3px rgba($accent, .12);
 }
 
-.fundkit-input--edited,
-.fundkit-textarea--edited {
+.gratora-input--edited,
+.gratora-textarea--edited {
     border-color: $accent;
     box-shadow: inset 2px 0 0 $accent;
 }
 
-.fundkit-textarea {
+.gratora-textarea {
     min-height: 88px;
     resize: vertical;
     line-height: 1.5;
 }
 
-.fundkit-input--mono,
-.fundkit-textarea--mono {
+.gratora-input--mono,
+.gratora-textarea--mono {
     font-family: $font-mono;
     font-size: $text-sm;
 }
 
 // select element-qualified (0,1,1) to beat `.wp-core-ui select`: restate the
 // chrome WP overrides (border, radius, padding, font, line-height, max-width)
-// and repaint the FundKit caret over WP's dashicon arrow.
+// and repaint the Gratora caret over WP's dashicon arrow.
 //
-// This ties with `select.fundkit-input--edited` above and wins on source order, so
+// This ties with `select.gratora-input--edited` above and wins on source order, so
 // its `border` shorthand resets that rule's accent back to grey while the inset
 // bar survives. An edited dropdown then reads as a stray green sliver against a
 // grey border. Restated at (0,2,1) below rather than reordered, so the chrome
 // can move without taking the edited state with it.
-select.fundkit-select {
+select.gratora-select {
     max-width: none;
     font-size: 13.5px;
     line-height: normal;
@@ -141,21 +141,21 @@ select.fundkit-select {
     background: $bg-card url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.5' d='M1 1l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
 }
 
-select.fundkit-select.fundkit-input--edited {
+select.gratora-select.gratora-input--edited {
     border-color: $accent;
 }
 
-select.fundkit-select.fundkit-input--edited:focus {
+select.gratora-select.gratora-input--edited:focus {
     box-shadow: inset 2px 0 0 $accent, 0 0 0 3px rgba($accent, .12);
 }
 
-.fundkit-input-row {
+.gratora-input-row {
     display: flex;
     gap: $space-2;
 
-    .fundkit-input { flex: 1; }
+    .gratora-input { flex: 1; }
 
-    .fundkit-copy-btn {
+    .gratora-copy-btn {
         flex-shrink: 0;
         padding: 6px 10px;
         background: $bg-page;
@@ -169,7 +169,7 @@ select.fundkit-select.fundkit-input--edited:focus {
         &:hover { color: $text; background: #eef1f4; }
     }
 
-    &--locked .fundkit-input {
+    &--locked .gratora-input {
         background: $bg-page;
         color: $text-muted;
     }

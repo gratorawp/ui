@@ -3,7 +3,7 @@ import { dateI18n } from '@wordpress/date';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Date (or date + time) input that looks like a .fundkit-input and opens a WP
+ * Date (or date + time) input that looks like a .gratora-input and opens a WP
  * picker on click. Backed by an ISO string:
  *   - date only:   "YYYY-MM-DD"          (default)
  *   - with time:   "YYYY-MM-DD HH:MM:SS" (when withTime is true)
@@ -18,7 +18,7 @@ import { __ } from '@wordpress/i18n';
  *   is12Hour    bool           passed to DateTimePicker; defaults to WP setting
  *   placeholder string         shown when value is empty
  *   ariaLabel   string         accessible label
- *   edited      bool           applies .fundkit-input--edited
+ *   edited      bool           applies .gratora-input--edited
  *   className   string         extra classes on the trigger button
  *   format      string         WP date format token; defaults to site setting
  *   allowClear  bool           shows a Clear button under the picker
@@ -44,9 +44,9 @@ export default function DateField( {
         : '';
 
     const triggerClass = [
-        'fundkit-input',
-        'fundkit-date-field',
-        edited && 'fundkit-input--edited',
+        'gratora-input',
+        'gratora-date-field',
+        edited && 'gratora-input--edited',
         className,
     ].filter( Boolean ).join( ' ' );
 
@@ -64,12 +64,12 @@ export default function DateField( {
                     aria-haspopup="dialog"
                     aria-label={ ariaLabel }
                 >
-                    <span className={ `fundkit-date-field__value${ value ? '' : ' is-empty' }` }>
+                    <span className={ `gratora-date-field__value${ value ? '' : ' is-empty' }` }>
                         { displayValue || placeholder || ( withTime
-                            ? __( 'Select date and time', 'fundkit-fundraising-campaigns' )
-                            : __( 'Select a date', 'fundkit-fundraising-campaigns' ) ) }
+                            ? __( 'Select date and time', 'gratora-fundraising-campaigns' )
+                            : __( 'Select a date', 'gratora-fundraising-campaigns' ) ) }
                     </span>
-                    <svg className="fundkit-date-field__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="gratora-date-field__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
                         <line x1="8" y1="2" x2="8" y2="6" />
@@ -78,7 +78,7 @@ export default function DateField( {
                 </button>
             ) }
             renderContent={ ( { onClose } ) => (
-                <div className="fundkit-date-field__popover">
+                <div className="gratora-date-field__popover">
                     <Picker
                         currentDate={ value || undefined }
                         is12Hour={ is12Hour }
@@ -92,11 +92,11 @@ export default function DateField( {
                         <Button
                             variant="tertiary"
                             onClick={ () => { onChange( null ); onClose(); } }
-                            className="fundkit-date-field__clear"
+                            className="gratora-date-field__clear"
                         >
                             { withTime
-                                ? __( 'Clear date and time', 'fundkit-fundraising-campaigns' )
-                                : __( 'Clear date', 'fundkit-fundraising-campaigns' ) }
+                                ? __( 'Clear date and time', 'gratora-fundraising-campaigns' )
+                                : __( 'Clear date', 'gratora-fundraising-campaigns' ) }
                         </Button>
                     ) }
                 </div>

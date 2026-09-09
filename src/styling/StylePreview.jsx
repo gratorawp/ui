@@ -52,89 +52,89 @@ export default function StylePreview( {
     const addr = `${ host }/campaigns/${ slug }`;
 
     return (
-        <div className="fundkit-style-preview">
-            <div className="fundkit-style-preview__frame" style={ frameStyle }>
-                <div className="fundkit-style-preview__chrome">
-                    <span className="fundkit-style-preview__dots" aria-hidden="true">
+        <div className="gratora-style-preview">
+            <div className="gratora-style-preview__frame" style={ frameStyle }>
+                <div className="gratora-style-preview__chrome">
+                    <span className="gratora-style-preview__dots" aria-hidden="true">
                         <span /><span /><span />
                     </span>
-                    <span className="fundkit-style-preview__addr">{ addr }</span>
+                    <span className="gratora-style-preview__addr">{ addr }</span>
                 </div>
 
-                <div className="fundkit-style-preview__page">
+                <div className="gratora-style-preview__page">
                     <div
-                        className="fundkit-style-preview__hero"
+                        className="gratora-style-preview__hero"
                         style={ imageUrl ? { backgroundImage: `url(${ imageUrl })` } : undefined }
                     >
-                        <div className="fundkit-style-preview__hero-title">{ title }</div>
+                        <div className="gratora-style-preview__hero-title">{ title }</div>
                     </div>
 
-                    <div className="fundkit-style-preview__body">
+                    <div className="gratora-style-preview__body">
                         { description && (
-                            <div className="fundkit-style-preview__desc">{ description }</div>
+                            <div className="gratora-style-preview__desc">{ description }</div>
                         ) }
 
-                        <div className="fundkit-style-preview__progress-track">
+                        <div className="gratora-style-preview__progress-track">
                             <div
-                                className="fundkit-style-preview__progress-fill"
+                                className="gratora-style-preview__progress-fill"
                                 style={ { width: `${ pct }%` } }
                             />
                         </div>
-                        <div className="fundkit-style-preview__progress-meta">
+                        <div className="gratora-style-preview__progress-meta">
                             <span>
                                 <strong>{ formatAmount( raisedCents, currency ) }</strong>
-                                { ' ' }{ __( 'raised', 'fundkit-fundraising-campaigns' ) }
+                                { ' ' }{ __( 'raised', 'gratora-fundraising-campaigns' ) }
                             </span>
                             { goalCents > 0 && (
                                 <span>
-                                    { __( 'of', 'fundkit-fundraising-campaigns' ) }{ ' ' }
+                                    { __( 'of', 'gratora-fundraising-campaigns' ) }{ ' ' }
                                     { formatAmount( goalCents, currency ) }{ ' ' }
-                                    { __( 'goal', 'fundkit-fundraising-campaigns' ) }
+                                    { __( 'goal', 'gratora-fundraising-campaigns' ) }
                                 </span>
                             ) }
                         </div>
 
-                        <div className="fundkit-style-preview__amounts">
+                        <div className="gratora-style-preview__amounts">
                             { presets.map( ( a, i ) => (
                                 <div
                                     key={ i }
-                                    className={ `fundkit-style-preview__amount${ i === selectedIdx ? ' is-sel' : '' }` }
+                                    className={ `gratora-style-preview__amount${ i === selectedIdx ? ' is-sel' : '' }` }
                                 >
                                     { formatAmount( a, currency ) }
                                 </div>
                             ) ) }
                         </div>
 
-                        <div className="fundkit-style-preview__fields">
-                            <div className="fundkit-style-preview__field">
-                                <span className="fundkit-style-preview__field-label">
-                                    { __( 'Other amount', 'fundkit-fundraising-campaigns' ) }
+                        <div className="gratora-style-preview__fields">
+                            <div className="gratora-style-preview__field">
+                                <span className="gratora-style-preview__field-label">
+                                    { __( 'Other amount', 'gratora-fundraising-campaigns' ) }
                                 </span>
-                                <div className="fundkit-style-preview__field-box fundkit-style-preview__field-box--amount is-focus">
+                                <div className="gratora-style-preview__field-box gratora-style-preview__field-box--amount is-focus">
                                     { formatAmount( presets[ selectedIdx ], currency ) }
                                 </div>
                             </div>
 
-                            <div className="fundkit-style-preview__field">
-                                <span className="fundkit-style-preview__field-label">
-                                    { __( 'Full name', 'fundkit-fundraising-campaigns' ) }
+                            <div className="gratora-style-preview__field">
+                                <span className="gratora-style-preview__field-label">
+                                    { __( 'Full name', 'gratora-fundraising-campaigns' ) }
                                 </span>
-                                <div className="fundkit-style-preview__field-box">
-                                    { __( 'Alex Morgan', 'fundkit-fundraising-campaigns' ) }
+                                <div className="gratora-style-preview__field-box">
+                                    { __( 'Alex Morgan', 'gratora-fundraising-campaigns' ) }
                                 </div>
                             </div>
                         </div>
 
-                        <div className="fundkit-style-preview__cta">
-                            { __( 'Donate', 'fundkit-fundraising-campaigns' ) }{ ' ' }
+                        <div className="gratora-style-preview__cta">
+                            { __( 'Donate', 'gratora-fundraising-campaigns' ) }{ ' ' }
                             { formatAmount( presets[ selectedIdx ], currency ) }
                         </div>
 
-                        <div className="fundkit-style-preview__meta">
+                        <div className="gratora-style-preview__meta">
                             { donors > 0
-                                ? `${ donors } ${ donors === 1 ? __( 'donor', 'fundkit-fundraising-campaigns' ) : __( 'donors', 'fundkit-fundraising-campaigns' ) }`
-                                : __( 'No donors yet', 'fundkit-fundraising-campaigns' ) }
-                            { endsAt && ` · ${ __( 'ends', 'fundkit-fundraising-campaigns' ) } ${ shortDate( endsAt ) }` }
+                                ? `${ donors } ${ donors === 1 ? __( 'donor', 'gratora-fundraising-campaigns' ) : __( 'donors', 'gratora-fundraising-campaigns' ) }`
+                                : __( 'No donors yet', 'gratora-fundraising-campaigns' ) }
+                            { endsAt && ` · ${ __( 'ends', 'gratora-fundraising-campaigns' ) } ${ shortDate( endsAt ) }` }
                         </div>
                     </div>
                 </div>
@@ -158,7 +158,7 @@ export function resolveEffectiveTokens( props = {} ) {
  * server applies on the way out, so the preview cannot promise a colour the
  * published page does not use.
  *
- * A surface that does not paint --fundkit-bg passes paintsGround: false: ink
+ * A surface that does not paint --gratora-bg passes paintsGround: false: ink
  * measured against a ground it never draws lands on whatever it draws instead.
  */
 export function resolveEffectiveStyle( props = {} ) {
@@ -237,14 +237,14 @@ function presetLayers( merged, shipped ) {
  * leaves both to the stylesheet, which derives them from the resolved accent.
  */
 function dropStalePairs( tokens, layers, defaults ) {
-    const resolved = String( tokens[ 'fundkit-accent' ] || '' );
+    const resolved = String( tokens[ 'gratora-accent' ] || '' );
 
-    for ( const key of [ 'fundkit-accent-soft', 'fundkit-focus-ring' ] ) {
-        let accent     = String( defaults[ 'fundkit-accent' ] || '' );
+    for ( const key of [ 'gratora-accent-soft', 'gratora-focus-ring' ] ) {
+        let accent     = String( defaults[ 'gratora-accent' ] || '' );
         let pairedWith = null;
 
         for ( const layer of layers ) {
-            if ( layer[ 'fundkit-accent' ] != null ) accent = String( layer[ 'fundkit-accent' ] );
+            if ( layer[ 'gratora-accent' ] != null ) accent = String( layer[ 'gratora-accent' ] );
             if ( layer[ key ] != null ) pairedWith = accent;
         }
 
@@ -264,13 +264,13 @@ function dropStalePairs( tokens, layers, defaults ) {
  * nothing about the ink would get near-black on whatever it picked.
  */
 function inkFollowsGround( tokens, presetTokens, inline, defaults ) {
-    const ground = String( tokens[ 'fundkit-bg' ] || '' );
-    if ( ground === '' || ground === defaults[ 'fundkit-bg' ] ) return;
+    const ground = String( tokens[ 'gratora-bg' ] || '' );
+    if ( ground === '' || ground === defaults[ 'gratora-bg' ] ) return;
 
     const on = inkPair( ground );
     if ( ! on ) return;
 
-    const slots = { 'fundkit-text': 0, 'fundkit-text-muted': 1 };
+    const slots = { 'gratora-text': 0, 'gratora-text-muted': 1 };
     for ( const key in slots ) {
         const chosen = presetTokens[ key ] != null || inline[ key ] != null;
         if ( ! chosen && tokens[ key ] === defaults[ key ] ) tokens[ key ] = on[ slots[ key ] ];

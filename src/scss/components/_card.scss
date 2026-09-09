@@ -3,7 +3,7 @@
 
 @import '../tokens';
 
-.fundkit-card {
+.gratora-card {
     background: $bg-card;
     border: 1px solid $border-soft;
     border-radius: $radius-lg;
@@ -87,10 +87,10 @@
 
     // Three children, so space-between would strand the status pill mid-row;
     // push it next to the chevron instead.
-    &--collapsible .fundkit-card__head-left { margin-right: auto; }
+    &--collapsible .gratora-card__head-left { margin-right: auto; }
 
     &--collapsible.is-closed {
-        .fundkit-card__head { border-bottom: 0; border-radius: $radius-lg; padding-bottom: $space-4; }
-        .fundkit-card__chevron { transform: rotate(-90deg); }
+        .gratora-card__head { border-bottom: 0; border-radius: $radius-lg; padding-bottom: $space-4; }
+        .gratora-card__chevron { transform: rotate(-90deg); }
     }
 }

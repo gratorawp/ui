@@ -1,5 +1,5 @@
 // AmountInput: currency prefix badge joined to a digit-grouped numeric input.
-.fundkit-amount {
+.gratora-amount {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: stretch;
@@ -38,8 +38,8 @@
     // Element-prefixed reset so WP admin's `input[type="text"]` default
     // styles (margin, box-shadow, border) don't bleed in.
     &__input,
-    input.fundkit-amount__input,
-    input[type="text"].fundkit-amount__input {
+    input.gratora-amount__input,
+    input[type="text"].gratora-amount__input {
         appearance: none;
         width: 100%;
         min-width: 0;

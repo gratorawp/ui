@@ -29,19 +29,19 @@ export default function Toaster() {
     if ( ! items.length ) return null;
 
     return (
-        <div className="fundkit-toaster" role="region" aria-label={ __( 'Notifications', 'fundkit-fundraising-campaigns' ) }>
+        <div className="gratora-toaster" role="region" aria-label={ __( 'Notifications', 'gratora-fundraising-campaigns' ) }>
             { items.map( ( t ) => (
                 <div
                     key={ t.id }
-                    className={ `fundkit-toast fundkit-toast--${ t.type }` }
+                    className={ `gratora-toast gratora-toast--${ t.type }` }
                     role={ t.type === 'error' || t.type === 'warning' ? 'alert' : 'status' }
                 >
-                    <span className="fundkit-toast__icon"><Glyph type={ t.type } /></span>
-                    <span className="fundkit-toast__msg">{ t.message }</span>
+                    <span className="gratora-toast__icon"><Glyph type={ t.type } /></span>
+                    <span className="gratora-toast__msg">{ t.message }</span>
                     { t.action && (
                         <button
                             type="button"
-                            className="fundkit-toast__action"
+                            className="gratora-toast__action"
                             onClick={ () => { t.action.onClick && t.action.onClick(); dismiss( t.id ); } }
                         >
                             { t.action.label }
@@ -49,8 +49,8 @@ export default function Toaster() {
                     ) }
                     <button
                         type="button"
-                        className="fundkit-toast__close"
-                        aria-label={ __( 'Dismiss', 'fundkit-fundraising-campaigns' ) }
+                        className="gratora-toast__close"
+                        aria-label={ __( 'Dismiss', 'gratora-fundraising-campaigns' ) }
                         onClick={ () => dismiss( t.id ) }
                     >
                         ×

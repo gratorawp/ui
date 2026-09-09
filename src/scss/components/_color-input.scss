@@ -1,12 +1,12 @@
 // Color trigger button (swatch + hex label) used by ColorInput.jsx. Opens
 // the WP ColorPicker in a popover, beside the button that empties it.
-.fundkit-color-control {
+.gratora-color-control {
     display: inline-flex;
     align-items: center;
     gap: $space-1;
 }
 
-.fundkit-color__clear {
+.gratora-color__clear {
     appearance: none;
     display: inline-flex;
     align-items: center;
@@ -33,7 +33,7 @@
     }
 }
 
-.fundkit-color {
+.gratora-color {
     appearance: none;
     display: inline-flex;
     align-items: center;
@@ -72,6 +72,6 @@
     }
 }
 
-.fundkit-color-picker-popover {
+.gratora-color-picker-popover {
     .components-popover__content { padding: 12px; }
 }

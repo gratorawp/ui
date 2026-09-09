@@ -1,14 +1,14 @@
 // Shared chrome for any admin list table that wraps <DataViews> in a
-// `.fundkit-dataviews` div. Imported by every list page SCSS (campaigns,
+// `.gratora-dataviews` div. Imported by every list page SCSS (campaigns,
 // donations, donors, funds, ...) so there is one source of truth for the
 // card shell, toolbar/filter rows, table header/body padding, the primary-
 // column-absorbs-space pattern, footer band, and selected/hover row colours.
 //
 // The consumer is expected to have already `@import`ed
-// `@fundkit/ui/scss/tokens` so $accent / $text / $bg-soft / $border-soft etc.
+// `@gratora/ui/scss/tokens` so $accent / $text / $bg-soft / $border-soft etc.
 // are in scope.
 
-.fundkit-dataviews {
+.gratora-dataviews {
     // DataViews reads its accent from --wp-admin-theme-color; override locally
     // so the selected row, checkbox tick, sort caret, etc. all read accent green.
     --wp-admin-theme-color:           #{$accent};
@@ -41,7 +41,7 @@
             linear-gradient(90deg, transparent 0%, #{$accent} 50%, transparent 100%)
             no-repeat 0 0 / 35% 100%
             $bg-soft;
-        animation: fundkitDataviewsProgress 1.1s linear infinite;
+        animation: gratoraDataviewsProgress 1.1s linear infinite;
         pointer-events: none;
     }
 
@@ -258,7 +258,7 @@
 }
 
 // Goal-progress cell, shared by the campaigns + funds lists (see GoalBar.jsx).
-.fundkit-goalbar {
+.gratora-goalbar {
     min-width: 120px;
     line-height: 1.2;
 
@@ -296,7 +296,7 @@
 // funds, donors). Lives here so a list only needs to @import this partial to
 // get the full cell kit; no cross-importing another page's stylesheet.
 
-.fundkit-row {
+.gratora-row {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -371,13 +371,13 @@
     }
 }
 
-.fundkit-mono {
+.gratora-mono {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 12.5px;
     color: $text;
 }
 
-.fundkit-mono-link {
+.gratora-mono-link {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 12.5px;
     color: $accent-dark;
@@ -387,7 +387,7 @@
     &:hover { color: $accent; text-decoration: underline; }
 }
 
-.fundkit-time {
+.gratora-time {
     display: inline-flex;
     flex-direction: column;
     line-height: 1.3;
@@ -403,11 +403,11 @@
     }
 }
 
-// @fundkit/ui's AmountInput claims `.fundkit-amount` (a <div>) with a grid layout +
+// @gratora/ui's AmountInput claims `.gratora-amount` (a <div>) with a grid layout +
 // border for the form input. The list tables reuse the class on a plain <span>
 // for the read-only amount cell, which inherits that border. Restrict the cell
 // styles to spans so the form input keeps its box and the cells stay flat.
-span.fundkit-amount {
+span.gratora-amount {
     display: inline;
     border: 0;
     background: transparent;
@@ -417,11 +417,11 @@ span.fundkit-amount {
     font-weight: 500;
     color: $text;
 
-    &.fundkit-amount--strike { text-decoration: line-through; color: $text-muted; font-weight: 400; }
-    &.fundkit-amount--num   { font-variant-numeric: tabular-nums; }
+    &.gratora-amount--strike { text-decoration: line-through; color: $text-muted; font-weight: 400; }
+    &.gratora-amount--num   { font-variant-numeric: tabular-nums; }
 }
 
-.fundkit-country {
+.gratora-country {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -439,7 +439,7 @@ span.fundkit-amount {
     }
 }
 
-@keyframes fundkitDataviewsProgress {
+@keyframes gratoraDataviewsProgress {
     0%   { background-position: -35% 0; }
     100% { background-position: 135% 0; }
 }

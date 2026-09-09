@@ -8,12 +8,12 @@ import { __ } from '@wordpress/i18n';
 function openMediaFrame( { onSelect, currentId } ) {
     if ( ! window.wp?.media ) {
         // eslint-disable-next-line no-alert
-        alert( __( 'Media library not loaded.', 'fundkit-fundraising-campaigns' ) );
+        alert( __( 'Media library not loaded.', 'gratora-fundraising-campaigns' ) );
         return;
     }
     const frame = window.wp.media( {
-        title:    __( 'Select campaign cover image', 'fundkit-fundraising-campaigns' ),
-        button:   { text: __( 'Use this image', 'fundkit-fundraising-campaigns' ) },
+        title:    __( 'Select campaign cover image', 'gratora-fundraising-campaigns' ),
+        button:   { text: __( 'Use this image', 'gratora-fundraising-campaigns' ) },
         library:  { type: 'image' },
         multiple: false,
     } );
@@ -41,31 +41,31 @@ export default function CoverImagePicker( { id, url, onChange } ) {
 
     if ( url ) {
         return (
-            <div className="fundkit-cover fundkit-cover--filled">
+            <div className="gratora-cover gratora-cover--filled">
                 <img src={ url } alt="" />
-                <div className="fundkit-cover__actions">
+                <div className="gratora-cover__actions">
                     <Button variant="secondary" onClick={ pick }>
-                        { __( 'Replace', 'fundkit-fundraising-campaigns' ) }
+                        { __( 'Replace', 'gratora-fundraising-campaigns' ) }
                     </Button>
                     <Button variant="tertiary" isDestructive onClick={ () => onChange( null ) }>
-                        { __( 'Remove', 'fundkit-fundraising-campaigns' ) }
+                        { __( 'Remove', 'gratora-fundraising-campaigns' ) }
                     </Button>
                 </div>
             </div>
         );
     }
     return (
-        <div className="fundkit-cover" onClick={ pick } role="button" tabIndex={ 0 }
+        <div className="gratora-cover" onClick={ pick } role="button" tabIndex={ 0 }
              onKeyDown={ ( e ) => ( e.key === 'Enter' || e.key === ' ' ) && pick() }>
-            <div className="fundkit-cover__icon" aria-hidden="true">
+            <div className="gratora-cover__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="24" height="24">
                     <path fill="currentColor" d="M11 16h2v-4.17l1.59 1.58L16 12l-4-4-4 4 1.41 1.41L11 11.83V16zm-7 4h16v-2H4v2zm0-16h16V2H4v2z" />
                 </svg>
             </div>
             <Button variant="secondary" onClick={ ( e ) => { e.stopPropagation(); pick(); } }>
-                { __( 'Select an image', 'fundkit-fundraising-campaigns' ) }
+                { __( 'Select an image', 'gratora-fundraising-campaigns' ) }
             </Button>
-            <div className="fundkit-cover__hint">{ __( 'or click anywhere in this area', 'fundkit-fundraising-campaigns' ) }</div>
+            <div className="gratora-cover__hint">{ __( 'or click anywhere in this area', 'gratora-fundraising-campaigns' ) }</div>
         </div>
     );
 }

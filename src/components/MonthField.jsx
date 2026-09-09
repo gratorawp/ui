@@ -28,7 +28,7 @@ export default function MonthField( { value, onChange, min, max, ariaLabel } ) {
     const label  = parsed
         ? sprintf(
             /* translators: 1: month name, 2: four-digit year. */
-            __( '%1$s %2$s', 'fundkit-fundraising-campaigns' ),
+            __( '%1$s %2$s', 'gratora-fundraising-campaigns' ),
             months[ parsed.month - 1 ],
             String( parsed.year )
         )
@@ -58,16 +58,16 @@ export default function MonthField( { value, onChange, min, max, ariaLabel } ) {
             renderToggle={ ( { isOpen, onToggle } ) => (
                 <button
                     type="button"
-                    className="fundkit-input fundkit-date-field"
+                    className="gratora-input gratora-date-field"
                     onClick={ onToggle }
                     aria-expanded={ isOpen }
                     aria-haspopup="dialog"
                     aria-label={ ariaLabel }
                 >
-                    <span className={ `fundkit-date-field__value${ label ? '' : ' is-empty' }` }>
-                        { label || __( 'Select a month', 'fundkit-fundraising-campaigns' ) }
+                    <span className={ `gratora-date-field__value${ label ? '' : ' is-empty' }` }>
+                        { label || __( 'Select a month', 'gratora-fundraising-campaigns' ) }
                     </span>
-                    <svg className="fundkit-date-field__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="gratora-date-field__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
                         <line x1="8" y1="2" x2="8" y2="6" />
@@ -76,29 +76,29 @@ export default function MonthField( { value, onChange, min, max, ariaLabel } ) {
                 </button>
             ) }
             renderContent={ ( { onClose } ) => (
-                <div className="fundkit-date-field__popover fundkit-month-field">
-                    <div className="fundkit-month-field__head">
+                <div className="gratora-date-field__popover gratora-month-field">
+                    <div className="gratora-month-field__head">
                         <button
                             type="button"
-                            className="fundkit-month-field__nav"
+                            className="gratora-month-field__nav"
                             onClick={ () => setYear( year - 1 ) }
                             disabled={ ! hasAnyMonth( year - 1 ) }
-                            aria-label={ __( 'Previous year', 'fundkit-fundraising-campaigns' ) }
+                            aria-label={ __( 'Previous year', 'gratora-fundraising-campaigns' ) }
                         >
                             ‹
                         </button>
-                        <span className="fundkit-month-field__year">{ year }</span>
+                        <span className="gratora-month-field__year">{ year }</span>
                         <button
                             type="button"
-                            className="fundkit-month-field__nav"
+                            className="gratora-month-field__nav"
                             onClick={ () => setYear( year + 1 ) }
                             disabled={ ! hasAnyMonth( year + 1 ) }
-                            aria-label={ __( 'Next year', 'fundkit-fundraising-campaigns' ) }
+                            aria-label={ __( 'Next year', 'gratora-fundraising-campaigns' ) }
                         >
                             ›
                         </button>
                     </div>
-                    <div className="fundkit-month-field__grid">
+                    <div className="gratora-month-field__grid">
                         { months.map( ( name, i ) => {
                             const m = i + 1;
                             const selected = parsed && parsed.year === year && parsed.month === m;
@@ -108,7 +108,7 @@ export default function MonthField( { value, onChange, min, max, ariaLabel } ) {
                                 <button
                                     key={ name }
                                     type="button"
-                                    className={ `fundkit-month-field__month${ selected ? ' is-selected' : '' }` }
+                                    className={ `gratora-month-field__month${ selected ? ' is-selected' : '' }` }
                                     disabled={ disabled }
                                     aria-pressed={ !! selected }
                                     onClick={ () => {

@@ -4,7 +4,7 @@
 
 // Above the WP admin bar/menu (~99999); the $z-* scale tops out at 5000 which
 // is not enough to cover WP chrome, so this overlay uses a literal.
-.fundkit-drawer-overlay {
+.gratora-drawer-overlay {
     position: fixed;
     inset: 0;
     background: rgba(15, 23, 42, .28);
@@ -13,7 +13,7 @@
     z-index: 100000;
 }
 
-.fundkit-drawer {
+.gratora-drawer {
     width: 460px;
     max-width: 92vw;
     background: $bg-card;

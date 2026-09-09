@@ -1,7 +1,7 @@
-// StylePreview. Previewed-page visuals read `var(--fundkit-*)`; the browser-frame
+// StylePreview. Previewed-page visuals read `var(--gratora-*)`; the browser-frame
 // chrome keeps fixed colors since it isn't part of what the admin is styling.
 
-.fundkit-style-preview {
+.gratora-style-preview {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -9,8 +9,8 @@
     &__frame {
         // What the resolver drops, the stylesheet derives, as the donation form
         // does. Literal first for a browser without color-mix.
-        --fundkit-accent-soft: #efedf8;
-        --fundkit-accent-soft: color-mix(in srgb, var(--fundkit-accent, #211d3f) 12%, var(--fundkit-bg, #fff));
+        --gratora-accent-soft: #efedf8;
+        --gratora-accent-soft: color-mix(in srgb, var(--gratora-accent, #211d3f) 12%, var(--gratora-bg, #fff));
 
         background: #fff;
         border: 1px solid #eef0f2;
@@ -59,11 +59,11 @@
     }
 
     &__page {
-        background: var(--fundkit-bg, #fff);
-        color: var(--fundkit-text, #111827);
-        font-family: var(--fundkit-typeface, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
-        font-size: var(--fundkit-type-size, 15px);
-        font-weight: var(--fundkit-body-weight, 400);
+        background: var(--gratora-bg, #fff);
+        color: var(--gratora-text, #111827);
+        font-family: var(--gratora-typeface, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+        font-size: var(--gratora-type-size, 15px);
+        font-weight: var(--gratora-body-weight, 400);
     }
 
     &__hero {
@@ -72,9 +72,9 @@
         overflow: hidden;
         background:
             linear-gradient(135deg,
-                color-mix(in srgb, var(--fundkit-accent, #211d3f) 20%, #f5d97f),
-                color-mix(in srgb, var(--fundkit-accent, #211d3f) 60%, #e8b94c) 60%,
-                var(--fundkit-accent, #211d3f));
+                color-mix(in srgb, var(--gratora-accent, #211d3f) 20%, #f5d97f),
+                color-mix(in srgb, var(--gratora-accent, #211d3f) 60%, #e8b94c) 60%,
+                var(--gratora-accent, #211d3f));
         background-size: cover;
         background-position: center;
 
@@ -93,21 +93,21 @@
         bottom: 12px;
         color: #fff;
         font-size: 16px;
-        font-weight: var(--fundkit-heading-weight, 600);
+        font-weight: var(--gratora-heading-weight, 600);
         letter-spacing: -0.01em;
         z-index: 2;
         text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
-        font-family: var(--fundkit-typeface, inherit);
+        font-family: var(--gratora-typeface, inherit);
     }
 
     &__body {
         padding: 16px;
-        background: var(--fundkit-bg, #fff);
+        background: var(--gratora-bg, #fff);
     }
 
     &__desc {
         font-size: 12px;
-        color: var(--fundkit-text-muted, #6b7280);
+        color: var(--gratora-text-muted, #6b7280);
         line-height: 1.55;
         margin-bottom: 14px;
         display: -webkit-box;
@@ -118,17 +118,17 @@
 
     &__progress-track {
         height: 6px;
-        background: var(--fundkit-bg-soft, #eef0f2);
-        border: var(--fundkit-stroke, 0) solid var(--fundkit-border, transparent);
-        border-radius: var(--fundkit-radius-sm, 3px);
+        background: var(--gratora-bg-soft, #eef0f2);
+        border: var(--gratora-stroke, 0) solid var(--gratora-border, transparent);
+        border-radius: var(--gratora-radius-sm, 3px);
         overflow: hidden;
         margin-bottom: 6px;
     }
 
     &__progress-fill {
         height: 100%;
-        background: var(--fundkit-accent, #211d3f);
-        border-radius: var(--fundkit-radius-sm, 3px);
+        background: var(--gratora-accent, #211d3f);
+        border-radius: var(--gratora-radius-sm, 3px);
         transition: width .2s ease, background .2s ease;
     }
 
@@ -136,11 +136,11 @@
         display: flex;
         justify-content: space-between;
         font-size: 11px;
-        color: var(--fundkit-text-muted, #6b7280);
+        color: var(--gratora-text-muted, #6b7280);
         margin-bottom: 14px;
 
         strong {
-            color: var(--fundkit-text, #111827);
+            color: var(--gratora-text, #111827);
             font-weight: 600;
         }
     }
@@ -154,19 +154,19 @@
 
     &__amount {
         padding: 8px 0;
-        border: var(--fundkit-stroke, 1px) solid var(--fundkit-border, #e5e7eb);
-        border-radius: var(--fundkit-radius-sm, 6px);
-        background: var(--fundkit-bg-soft, #f8fafb);
+        border: var(--gratora-stroke, 1px) solid var(--gratora-border, #e5e7eb);
+        border-radius: var(--gratora-radius-sm, 6px);
+        background: var(--gratora-bg-soft, #f8fafb);
         text-align: center;
         font-size: 12px;
-        color: var(--fundkit-on-soft, var(--fundkit-text, #111827));
+        color: var(--gratora-on-soft, var(--gratora-text, #111827));
         font-weight: 500;
         transition: background .2s ease, border-color .2s ease;
 
         &.is-sel {
-            background: var(--fundkit-accent-soft, #efedf8);
-            border-color: var(--fundkit-accent, #211d3f);
-            color: var(--fundkit-accent, #34306b);
+            background: var(--gratora-accent-soft, #efedf8);
+            border-color: var(--gratora-accent, #211d3f);
+            color: var(--gratora-accent, #34306b);
             font-weight: 600;
         }
     }
@@ -183,21 +183,21 @@
     &__field {
         display: flex;
         flex-direction: column;
-        gap: var(--fundkit-field-gap, 4px);
+        gap: var(--gratora-field-gap, 4px);
     }
 
     &__field-label {
         font-size: 11px;
         font-weight: 500;
-        color: var(--fundkit-text-muted, #6b7280);
+        color: var(--gratora-text-muted, #6b7280);
     }
 
     &__field-box {
         padding: 8px 10px;
-        border: var(--fundkit-stroke, 1px) solid var(--fundkit-border, #e5e7eb);
-        border-radius: var(--fundkit-radius-sm, 6px);
-        background: var(--fundkit-field-bg, #fff);
-        color: var(--fundkit-on-field, var(--fundkit-text, #111827));
+        border: var(--gratora-stroke, 1px) solid var(--gratora-border, #e5e7eb);
+        border-radius: var(--gratora-radius-sm, 6px);
+        background: var(--gratora-field-bg, #fff);
+        color: var(--gratora-on-field, var(--gratora-text, #111827));
         font-size: 12px;
         line-height: 1.4;
         white-space: nowrap;
@@ -209,8 +209,8 @@
         }
 
         &.is-focus {
-            border-color: var(--fundkit-focus-ring, var(--fundkit-accent, #211d3f));
-            box-shadow: 0 0 0 3px var(--fundkit-accent-soft, #efedf8);
+            border-color: var(--gratora-focus-ring, var(--gratora-accent, #211d3f));
+            box-shadow: 0 0 0 3px var(--gratora-accent-soft, #efedf8);
         }
     }
 
@@ -218,25 +218,25 @@
         width: 100%;
         padding: 10px 0;
         // Honor the same button tokens as the donor-form runtime so presets
-        // that override --fundkit-button-bg / --fundkit-button-fg / --fundkit-button-border
+        // that override --gratora-button-bg / --gratora-button-fg / --gratora-button-border
         // (Quiet's outline button, future presets) preview accurately. The
         // accent stays as the fallback for filled-style presets.
-        background: var(--fundkit-button-bg, var(--fundkit-accent, #211d3f));
-        color: var(--fundkit-button-fg, var(--fundkit-on-accent, #fff));
-        border: var(--fundkit-button-border, 0);
-        border-radius: var(--fundkit-button-radius, var(--fundkit-radius-sm, 6px));
+        background: var(--gratora-button-bg, var(--gratora-accent, #211d3f));
+        color: var(--gratora-button-fg, var(--gratora-on-accent, #fff));
+        border: var(--gratora-button-border, 0);
+        border-radius: var(--gratora-button-radius, var(--gratora-radius-sm, 6px));
         font-size: 13px;
-        font-weight: var(--fundkit-button-weight, 600);
+        font-weight: var(--gratora-button-weight, 600);
         text-align: center;
         letter-spacing: 0.01em;
-        box-shadow: var(--fundkit-button-shadow, 0 1px 2px rgba(0, 0, 0, .08));
+        box-shadow: var(--gratora-button-shadow, 0 1px 2px rgba(0, 0, 0, .08));
         transition: background .2s ease;
     }
 
     &__meta {
         margin-top: 10px;
         font-size: 11px;
-        color: var(--fundkit-text-muted, #9ca3af);
+        color: var(--gratora-text-muted, #9ca3af);
         text-align: center;
         font-variant-numeric: tabular-nums;
     }

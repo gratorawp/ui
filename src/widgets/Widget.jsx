@@ -16,22 +16,22 @@ export function WidgetCard( {
     bare = false,
 } ) {
     return (
-        <div className={ `fundkit-widget${ isOverlay ? ' is-overlay' : '' }${ bare ? ' fundkit-widget--bare' : '' }` }>
-            <div className="fundkit-widget__chrome">
+        <div className={ `gratora-widget${ isOverlay ? ' is-overlay' : '' }${ bare ? ' gratora-widget--bare' : '' }` }>
+            <div className="gratora-widget__chrome">
                 <button
                     type="button"
-                    className="fundkit-widget__handle"
-                    aria-label={ __( 'Drag to reorder', 'fundkit-fundraising-campaigns' ) }
+                    className="gratora-widget__handle"
+                    aria-label={ __( 'Drag to reorder', 'gratora-fundraising-campaigns' ) }
                     { ...dragHandleProps }
                 >
                     <Icon name="drag-grip" size={ 14 } />
                 </button>
-                { title && <h3 className="fundkit-widget__title">{ title }</h3> }
-                <div className="fundkit-widget__head-extras">{ headerExtras }</div>
+                { title && <h3 className="gratora-widget__title">{ title }</h3> }
+                <div className="gratora-widget__head-extras">{ headerExtras }</div>
                 { ! isOverlay && (
                     <Dropdown
-                        className="fundkit-widget__menu"
-                        contentClassName="fundkit-widget__menu-content"
+                        className="gratora-widget__menu"
+                        contentClassName="gratora-widget__menu-content"
                         popoverProps={ { placement: 'bottom-end' } }
                         renderToggle={ ( { isOpen, onToggle } ) => (
                             <Button
@@ -39,7 +39,7 @@ export function WidgetCard( {
                                 variant="tertiary"
                                 onClick={ onToggle }
                                 aria-expanded={ isOpen }
-                                aria-label={ __( 'Widget options', 'fundkit-fundraising-campaigns' ) }
+                                aria-label={ __( 'Widget options', 'gratora-fundraising-campaigns' ) }
                                 icon={ <Icon name="settings" size={ 18 } /> }
                             />
                         ) }
@@ -49,26 +49,26 @@ export function WidgetCard( {
                                     disabled={ ! canMoveUp }
                                     onClick={ () => { onMoveUp?.(); onClose(); } }
                                 >
-                                    { __( 'Move up', 'fundkit-fundraising-campaigns' ) }
+                                    { __( 'Move up', 'gratora-fundraising-campaigns' ) }
                                 </MenuItem>
                                 <MenuItem
                                     disabled={ ! canMoveDown }
                                     onClick={ () => { onMoveDown?.(); onClose(); } }
                                 >
-                                    { __( 'Move down', 'fundkit-fundraising-campaigns' ) }
+                                    { __( 'Move down', 'gratora-fundraising-campaigns' ) }
                                 </MenuItem>
                                 <MenuItem
                                     isDestructive
                                     onClick={ () => { onHide?.(); onClose(); } }
                                 >
-                                    { __( 'Hide widget', 'fundkit-fundraising-campaigns' ) }
+                                    { __( 'Hide widget', 'gratora-fundraising-campaigns' ) }
                                 </MenuItem>
                             </MenuGroup>
                         ) }
                     />
                 ) }
             </div>
-            <div className="fundkit-widget__body">{ children }</div>
+            <div className="gratora-widget__body">{ children }</div>
         </div>
     );
 }
@@ -94,7 +94,7 @@ export default function Widget( {
         <div
             ref={ setNodeRef }
             style={ style }
-            className={ `fundkit-widget-slot fundkit-widget-slot--${ span }${ isDragging ? ' is-dragging-source' : '' }` }
+            className={ `gratora-widget-slot gratora-widget-slot--${ span }${ isDragging ? ' is-dragging-source' : '' }` }
             data-widget-id={ id }
         >
             <WidgetCard

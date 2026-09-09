@@ -30,18 +30,18 @@ export default function RevenueChart( { series = [], currency, compareOn, compar
     } ) ), [ series, prev ] );
 
     if ( ! series || series.length === 0 ) {
-        return <div className="fundkit-chart-empty">{ __( 'No data yet.', 'fundkit-fundraising-campaigns' ) }</div>;
+        return <div className="gratora-chart-empty">{ __( 'No data yet.', 'gratora-fundraising-campaigns' ) }</div>;
     }
 
     const fmtY = ( v ) => formatAmount( v, currency );
     const fmtX = ( v ) => String( v ).slice( 5 ); // MM-DD
 
     return (
-        <div className="fundkit-recharts">
+        <div className="gratora-recharts">
             <ResponsiveContainer width="100%" height={ 280 }>
                 <AreaChart data={ data } margin={ { top: 12, right: 12, bottom: 0, left: 0 } }>
                     <defs>
-                        <linearGradient id="fundkit-rev-grad" x1="0" x2="0" y1="0" y2="1">
+                        <linearGradient id="gratora-rev-grad" x1="0" x2="0" y1="0" y2="1">
                             <stop offset="0%"   stopColor="#6f5ce6" stopOpacity={ 0.22 } />
                             <stop offset="100%" stopColor="#6f5ce6" stopOpacity={ 0 } />
                         </linearGradient>
@@ -80,7 +80,7 @@ export default function RevenueChart( { series = [], currency, compareOn, compar
                         labelFormatter={ ( d ) => formatDate( d ) }
                         formatter={ ( value, name ) => [
                             formatAmount( value || 0, currency ),
-                            name === 'current' ? __( 'Current', 'fundkit-fundraising-campaigns' ) : __( 'Previous', 'fundkit-fundraising-campaigns' ),
+                            name === 'current' ? __( 'Current', 'gratora-fundraising-campaigns' ) : __( 'Previous', 'gratora-fundraising-campaigns' ),
                         ] }
                     />
                     <Area
@@ -88,7 +88,7 @@ export default function RevenueChart( { series = [], currency, compareOn, compar
                         dataKey="current"
                         stroke="#6f5ce6"
                         strokeWidth={ 2 }
-                        fill="url(#fundkit-rev-grad)"
+                        fill="url(#gratora-rev-grad)"
                         isAnimationActive={ false }
                     />
                     { prev && (

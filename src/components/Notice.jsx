@@ -16,15 +16,15 @@ export default function Notice( { status = 'info', compact = false, onRemove, is
     const s = STATUSES.includes( status ) ? status : 'info';
     return (
         <div
-            className={ `fundkit-notice fundkit-notice--${ s }${ compact ? ' fundkit-notice--compact' : '' }` }
+            className={ `gratora-notice gratora-notice--${ s }${ compact ? ' gratora-notice--compact' : '' }` }
             role={ s === 'error' || s === 'warning' ? 'alert' : 'status' }
         >
-            <div className="fundkit-notice__body">{ children }</div>
+            <div className="gratora-notice__body">{ children }</div>
             { isDismissible && onRemove && (
                 <button
                     type="button"
-                    className="fundkit-notice__close"
-                    aria-label={ __( 'Dismiss', 'fundkit-fundraising-campaigns' ) }
+                    className="gratora-notice__close"
+                    aria-label={ __( 'Dismiss', 'gratora-fundraising-campaigns' ) }
                     onClick={ onRemove }
                 >
                     ×

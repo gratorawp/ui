@@ -1,8 +1,8 @@
 // DateField trigger + WP popover styles. Used anywhere DateField renders.
-// Pairs with _form.scss for the .fundkit-input base; this partial only adds the
+// Pairs with _form.scss for the .gratora-input base; this partial only adds the
 // flex layout + popover accent overrides.
 
-.fundkit-date-field {
+.gratora-date-field {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;

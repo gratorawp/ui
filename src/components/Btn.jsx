@@ -17,9 +17,9 @@ export default function Btn( {
     ...rest
 } ) {
     const classes = [
-        'fundkit-btn',
-        variant && `fundkit-btn--${ variant }`,
-        size && `fundkit-btn--${ size }`,
+        'gratora-btn',
+        variant && `gratora-btn--${ variant }`,
+        size && `gratora-btn--${ size }`,
         className,
     ].filter( Boolean ).join( ' ' );
 

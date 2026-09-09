@@ -9,17 +9,17 @@
  */
 export default function FormRow( { label, help, fieldHelp, required, wide, children } ) {
     return (
-        <div className={ `fundkit-form-row${ wide ? ' fundkit-form-row--wide' : '' }` }>
+        <div className={ `gratora-form-row${ wide ? ' gratora-form-row--wide' : '' }` }>
             { label && (
-                <div className="fundkit-form-row__label">
+                <div className="gratora-form-row__label">
                     { label }
                     { required && <span className="req">*</span> }
-                    { help && <div className="fundkit-form-row__help">{ help }</div> }
+                    { help && <div className="gratora-form-row__help">{ help }</div> }
                 </div>
             ) }
-            <div className="fundkit-form-row__field">
+            <div className="gratora-form-row__field">
                 { children }
-                { fieldHelp && <div className="fundkit-form-row__field-help">{ fieldHelp }</div> }
+                { fieldHelp && <div className="gratora-form-row__field-help">{ fieldHelp }</div> }
             </div>
         </div>
     );

@@ -4,7 +4,7 @@
 
 @import '../tokens';
 
-.fundkit-toaster {
+.gratora-toaster {
     position: fixed;
     right: 20px;
     bottom: 20px;
@@ -16,7 +16,7 @@
     pointer-events: none; // let clicks through the gaps
 }
 
-.fundkit-toast {
+.gratora-toast {
     pointer-events: auto;
     display: flex;
     align-items: flex-start;
@@ -29,7 +29,7 @@
     font-family: $font-sans;
     font-size: $text-base;
     line-height: 1.4;
-    animation: fundkit-toast-in .18s ease-out;
+    animation: gratora-toast-in .18s ease-out;
 
     &__icon {
         flex-shrink: 0;
@@ -80,19 +80,19 @@
         border: 1px solid $border-mid;
         border-left: 3px solid;
 
-        .fundkit-toast__action { color: $accent-dark; }
-        .fundkit-toast__close  { color: $text-soft; &:hover { color: $text; } }
+        .gratora-toast__action { color: $accent-dark; }
+        .gratora-toast__close  { color: $text-soft; &:hover { color: $text; } }
     }
 
-    &--error   { border-left-color: $red;   .fundkit-toast__icon { color: $red; } }
-    &--warning { border-left-color: $amber; .fundkit-toast__icon { color: $amber; } }
+    &--error   { border-left-color: $red;   .gratora-toast__icon { color: $red; } }
+    &--warning { border-left-color: $amber; .gratora-toast__icon { color: $amber; } }
 }
 
-@keyframes fundkit-toast-in {
+@keyframes gratora-toast-in {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 @media ( prefers-reduced-motion: reduce ) {
-    .fundkit-toast { animation: none; }
+    .gratora-toast { animation: none; }
 }

@@ -24,7 +24,7 @@ export default function KeyField( { value, onChange, secret, placeholder, ariaLa
 
     const inputProps = {
         type,
-        className: 'fundkit-input fundkit-input--mono',
+        className: 'gratora-input gratora-input--mono',
         value: display,
         placeholder,
         ...( onChange
@@ -33,26 +33,26 @@ export default function KeyField( { value, onChange, secret, placeholder, ariaLa
     };
 
     return (
-        <div className={ `fundkit-input-row${ masked ? ' fundkit-input-row--locked' : '' }` }>
+        <div className={ `gratora-input-row${ masked ? ' gratora-input-row--locked' : '' }` }>
             <input { ...inputProps } />
             { secret ? (
                 <button
                     type="button"
-                    className="fundkit-copy-btn"
+                    className="gratora-copy-btn"
                     onClick={ onToggle }
-                    aria-label={ ariaLabel || ( shown ? __( 'Hide', 'fundkit-fundraising-campaigns' ) : __( 'Reveal', 'fundkit-fundraising-campaigns' ) ) }
+                    aria-label={ ariaLabel || ( shown ? __( 'Hide', 'gratora-fundraising-campaigns' ) : __( 'Reveal', 'gratora-fundraising-campaigns' ) ) }
                 >
-                    { shown ? __( 'Hide', 'fundkit-fundraising-campaigns' ) : __( 'Reveal', 'fundkit-fundraising-campaigns' ) }
+                    { shown ? __( 'Hide', 'gratora-fundraising-campaigns' ) : __( 'Reveal', 'gratora-fundraising-campaigns' ) }
                 </button>
             ) : (
                 <button
                     type="button"
-                    className="fundkit-copy-btn"
+                    className="gratora-copy-btn"
                     onClick={ onCopy }
-                    aria-label={ ariaLabel || __( 'Copy', 'fundkit-fundraising-campaigns' ) }
+                    aria-label={ ariaLabel || __( 'Copy', 'gratora-fundraising-campaigns' ) }
                     disabled={ ! display }
                 >
-                    { __( 'Copy', 'fundkit-fundraising-campaigns' ) }
+                    { __( 'Copy', 'gratora-fundraising-campaigns' ) }
                 </button>
             ) }
         </div>

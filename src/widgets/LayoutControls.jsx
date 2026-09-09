@@ -14,16 +14,16 @@ export default function LayoutControls( { hidden, registry, onUnhide, onReset } 
             renderToggle={ ( { isOpen, onToggle } ) => (
                 <button
                     type="button"
-                    className={ `fundkit-layout-toggle${ isOpen ? ' is-open' : '' }` }
+                    className={ `gratora-layout-toggle${ isOpen ? ' is-open' : '' }` }
                     onClick={ onToggle }
                     aria-expanded={ isOpen }
                 >
                     <Icon name="layout-grid" size={ 14 } />
                     { hidden.length === 0
-                        ? __( 'Customize', 'fundkit-fundraising-campaigns' )
+                        ? __( 'Customize', 'gratora-fundraising-campaigns' )
                         : sprintf(
                             /* translators: %d: number of hidden widgets */
-                            _n( '%d hidden widget', '%d hidden widgets', hidden.length, 'fundkit-fundraising-campaigns' ),
+                            _n( '%d hidden widget', '%d hidden widgets', hidden.length, 'gratora-fundraising-campaigns' ),
                             hidden.length
                         ) }
                 </button>
@@ -31,7 +31,7 @@ export default function LayoutControls( { hidden, registry, onUnhide, onReset } 
             renderContent={ ( { onClose } ) => (
                 <>
                     { hidden.length > 0 && (
-                        <MenuGroup label={ __( 'Show again', 'fundkit-fundraising-campaigns' ) }>
+                        <MenuGroup label={ __( 'Show again', 'gratora-fundraising-campaigns' ) }>
                             { hidden.map( ( key ) => {
                                 const label = registry[ key ]?.title || registry[ key ]?.label || key;
                                 return (
@@ -46,7 +46,7 @@ export default function LayoutControls( { hidden, registry, onUnhide, onReset } 
                         <MenuItem
                             onClick={ () => { onReset(); onClose(); } }
                         >
-                            { __( 'Reset layout', 'fundkit-fundraising-campaigns' ) }
+                            { __( 'Reset layout', 'gratora-fundraising-campaigns' ) }
                         </MenuItem>
                     </MenuGroup>
                 </>

@@ -1,9 +1,9 @@
 // Stat-card strip used above admin list tables (donations, campaigns, ...).
 // Auto-fit grid so cards reflow at narrower widths. Consumer is expected
-// to have already `@import`ed `@fundkit/ui/scss/tokens` so $border-soft /
+// to have already `@import`ed `@gratora/ui/scss/tokens` so $border-soft /
 // $text / $text-muted are in scope.
 
-.fundkit-kpi-strip {
+.gratora-kpi-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 10px;

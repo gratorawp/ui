@@ -2,7 +2,7 @@
 
 @import '../tokens';
 
-.fundkit-switch {
+.gratora-switch {
     position: relative;
     display: inline-block;
     width: 34px;
@@ -39,7 +39,7 @@
 
 // Toggle row: title + sub on the left, the Switch on the right. Lives with
 // the component (ToggleRow in Switch.jsx); previously copy-pasted per page.
-.fundkit-toggle-row {
+.gratora-toggle-row {
     display: flex;
     align-items: center;
     gap: 14px;

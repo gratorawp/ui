@@ -3,7 +3,7 @@
  * each shows the effective value (override or default) with a Reset link.
  *
  * Pure / prop-driven: pass `catalogue`, `groups`, and `defaults` explicitly.
- * The FundKit plugin sources these from window.fundkit.styling and passes them in.
+ * The Gratora plugin sources these from window.gratora.styling and passes them in.
  *
  * `base` is the layer beneath `value` when `value` carries that layer too, as a
  * brand preset's token map does. A key equal to its base is not an override, so
@@ -59,7 +59,7 @@ export default function TokenEditor( {
     };
 
     return (
-        <div className="fundkit-token-editor">
+        <div className="gratora-token-editor">
             { orderedGroups.map( ( g, gi ) => (
                 <PanelBody
                     key={ g }
@@ -97,17 +97,17 @@ function same( a, b, def ) {
 function TokenRow( { tokenKey, def, current, isOverridden, onChange, onReset } ) {
     const label = def.label || tokenKey;
     return (
-        <div className="fundkit-token-editor__row">
-            <div className="fundkit-token-editor__row-head">
-                <span className="fundkit-token-editor__label">{ label }</span>
+        <div className="gratora-token-editor__row">
+            <div className="gratora-token-editor__row-head">
+                <span className="gratora-token-editor__label">{ label }</span>
                 { isOverridden && (
                     <Button
                         variant="link"
                         size="small"
-                        className="fundkit-token-editor__reset"
+                        className="gratora-token-editor__reset"
                         onClick={ onReset }
                     >
-                        { __( 'Reset', 'fundkit-fundraising-campaigns' ) }
+                        { __( 'Reset', 'gratora-fundraising-campaigns' ) }
                     </Button>
                 ) }
             </div>
@@ -117,7 +117,7 @@ function TokenRow( { tokenKey, def, current, isOverridden, onChange, onReset } )
                 value={ current }
                 onChange={ onChange }
             />
-            { def.help && <p className="fundkit-token-editor__help">{ def.help }</p> }
+            { def.help && <p className="gratora-token-editor__help">{ def.help }</p> }
         </div>
     );
 }
@@ -139,7 +139,7 @@ function TokenControl( { def, value, onChange } ) {
                         onChange={ onChange }
                         help={ sprintf(
                             /* translators: 1: smallest pixel size the slider offers, 2: the largest */
-                            __( 'The slider reads whole pixels from %1$spx to %2$spx. Type a size in that range to use it.', 'fundkit-fundraising-campaigns' ),
+                            __( 'The slider reads whole pixels from %1$spx to %2$spx. Type a size in that range to use it.', 'gratora-fundraising-campaigns' ),
                             min,
                             max
                         ) }
@@ -184,7 +184,7 @@ function TokenControl( { def, value, onChange } ) {
                     value={ value }
                     onChange={ onChange }
                     placeholder={ def.default || '' }
-                    help={ __( 'CSS font-family stack. e.g. Inter, system-ui, sans-serif.', 'fundkit-fundraising-campaigns' ) }
+                    help={ __( 'CSS font-family stack. e.g. Inter, system-ui, sans-serif.', 'gratora-fundraising-campaigns' ) }
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />

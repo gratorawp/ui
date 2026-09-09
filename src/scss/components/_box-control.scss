@@ -1,5 +1,5 @@
 // BoxControl: connected-row T/R/B/L numeric editor for box-model attributes.
-.fundkit-box-control {
+.gratora-box-control {
     margin-bottom: 18px;
 
     &:last-child { margin-bottom: 0; }
@@ -47,7 +47,7 @@
 
     &__row {
         display: grid;
-        grid-template-columns: repeat(var(--fundkit-box-cells, 4), 1fr) auto;
+        grid-template-columns: repeat(var(--gratora-box-cells, 4), 1fr) auto;
         background: #fff;
         border: 1px solid $border-mid;
         border-radius: 8px;
@@ -86,8 +86,8 @@
     // `input[type=number]` and `input:focus` rules which otherwise paint
     // their own border + blue focus ring inside our cells.
     &__input,
-    input.fundkit-box-control__input,
-    input[type="number"].fundkit-box-control__input {
+    input.gratora-box-control__input,
+    input[type="number"].gratora-box-control__input {
         appearance: textfield;
         -moz-appearance: textfield;
         width: 100%;

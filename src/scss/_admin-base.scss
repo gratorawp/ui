@@ -1,22 +1,22 @@
 // Cross-page admin defaults. Imported by every admin entry SCSS so the
-// rules below apply to every FundKit admin screen (list, detail, settings,
+// rules below apply to every Gratora admin screen (list, detail, settings,
 // donors, donations, forms, funds, onboarding) regardless of which
 // per-page wrapper class is present in the DOM.
 //
 // Targets the WP-generated body classes, matching any plugin whose menu slug
-// starts with `fundkit` so add-ons with their own slug are covered too:
-//   - body.toplevel_page_fundkit            -> FundKit's "Dashboard" entry
-//   - body.toplevel_page_fundkit-addon      -> an add-on's own top-level entry
-//   - body[class*="fundkit_page_fundkit-"]     -> every FundKit submenu page
-//   - body[class*="_page_fundkit-"]         -> every add-on submenu page
+// starts with `gratora` so add-ons with their own slug are covered too:
+//   - body.toplevel_page_gratora            -> Gratora's "Dashboard" entry
+//   - body.toplevel_page_gratora-addon      -> an add-on's own top-level entry
+//   - body[class*="gratora_page_gratora-"]     -> every Gratora submenu page
+//   - body[class*="_page_gratora-"]         -> every add-on submenu page
 //
-// The consumer is expected to have @import'd @fundkit/ui/scss/tokens
+// The consumer is expected to have @import'd @gratora/ui/scss/tokens
 // already so $accent / $accent-dark are in scope.
 
-body[class*="toplevel_page_fundkit"],
-body[class*="_page_fundkit-"] {
+body[class*="toplevel_page_gratora"],
+body[class*="_page_gratora-"] {
     // Re-skin WP components (ToggleControl, primary buttons, focus rings,
-    // etc.) from the default WP admin blue to the FundKit accent. Many WP
+    // etc.) from the default WP admin blue to the Gratora accent. Many WP
     // components read --wp-admin-theme-color directly.
     --wp-admin-theme-color:           #{$accent};
     --wp-admin-theme-color--rgb:      33, 29, 63;
@@ -31,7 +31,7 @@ body[class*="_page_fundkit-"] {
 
     // wp-admin's common.css ships `a:focus { border-radius: 2px;
     // box-shadow: 0 0 0 1.5px var(--wp-admin-theme-color); ... }` which
-    // wraps every FundKit link styled as a tab/button in a square coloured
+    // wraps every Gratora link styled as a tab/button in a square coloured
     // ring on click. Kill the shadow globally. border-radius and color
     // are restated per-class on the elements that need it (since
     // border-radius isn't inherited and the per-class color is part of
@@ -39,17 +39,17 @@ body[class*="_page_fundkit-"] {
     // colour preserved, not the page default).
     a:focus { box-shadow: none; }
 
-    // FundKit-styled keyboard focus ring on the shared .fundkit-btn primitive.
-    // Should live in @fundkit/ui long-term; kept here until the package
+    // Gratora-styled keyboard focus ring on the shared .gratora-btn primitive.
+    // Should live in @gratora/ui long-term; kept here until the package
     // ships a focus rule of its own.
     //
-    // Note: when .fundkit-btn renders as an <a>, multiple wp-admin / block-
+    // Note: when .gratora-btn renders as an <a>, multiple wp-admin / block-
     // theme rules at `a`, `a:hover`, `a:focus`, `a:active` win on
-    // specificity (0,1,1 over .fundkit-btn's 0,1,0) and dye the text bright
+    // specificity (0,1,1 over .gratora-btn's 0,1,0) and dye the text bright
     // blue, drop border-radius to 2px, and add a square box-shadow ring.
-    // Restate the fundkit values per anchor pseudo-state so the button
+    // Restate the gratora values per anchor pseudo-state so the button
     // stays itself.
-    .fundkit-btn {
+    .gratora-btn {
         &:hover, &:focus, &:active { color: $text; }
         &:focus {
             outline: none;
@@ -66,7 +66,7 @@ body[class*="_page_fundkit-"] {
         }
         &--ghost {
             &:focus, &:active { color: $text-muted; }
-            // @fundkit/ui sets ghost :hover to $text intentionally; keep it.
+            // @gratora/ui sets ghost :hover to $text intentionally; keep it.
         }
         &--danger {
             &:hover, &:focus, &:active { color: $red; }
@@ -74,7 +74,7 @@ body[class*="_page_fundkit-"] {
     }
 
     // Hide the native number-stepper buttons on admin number inputs for a flat,
-    // consistent look (across .fundkit-input / .fundkit-inp / .fundkit-fld). The field
+    // consistent look (across .gratora-input / .gratora-inp / .gratora-fld). The field
     // still accepts numbers and keyboard up/down.
     input[type="number"] {
         -moz-appearance: textfield;
@@ -87,11 +87,11 @@ body[class*="_page_fundkit-"] {
     }
 }
 
-// Page chrome shared by every FundKit admin screen (core + add-ons): crumbs,
+// Page chrome shared by every Gratora admin screen (core + add-ons): crumbs,
 // page head, the view-toggle tab pills, and status pills. Same classes as
 // the campaign screens so add-on pages are indistinguishable from core.
 
-.fundkit-crumbs {
+.gratora-crumbs {
     font-size: 13px;
     color: $text-muted;
     margin-bottom: 6px;
@@ -102,7 +102,7 @@ body[class*="_page_fundkit-"] {
     .sep { margin: 0 6px; color: #cbd0d5; }
 }
 
-.fundkit-page-head {
+.gratora-page-head {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -150,7 +150,7 @@ body[class*="_page_fundkit-"] {
     &__sub { margin: 4px 0 0; }
 }
 
-.fundkit-cmp-toggle {
+.gratora-cmp-toggle {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -190,18 +190,18 @@ body[class*="_page_fundkit-"] {
     &.is-active svg { color: $accent-dark; }
 }
 
-.fundkit-view-toggle {
+.gratora-view-toggle {
     display: inline-flex;
     align-items: center;
     gap: 6px;
 
-    .fundkit-cmp-toggle {
+    .gratora-cmp-toggle {
         text-decoration: none;
         font-weight: 500;
         box-shadow: none;
         border-color: $border-mid;
     }
-    .fundkit-cmp-toggle.is-active {
+    .gratora-cmp-toggle.is-active {
         background: $accent-soft;
         border-color: $accent;
         color: $accent-dark;
@@ -210,7 +210,7 @@ body[class*="_page_fundkit-"] {
     }
 }
 
-.fundkit-pill {
+.gratora-pill {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 2px 9px;
     border-radius: 999px;
@@ -220,7 +220,7 @@ body[class*="_page_fundkit-"] {
 
     &::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-    &:has(.fundkit-pill__dot)::before { display: none; }
+    &:has(.gratora-pill__dot)::before { display: none; }
 
     &--lg     { padding: 4px 12px; font-size: 12.5px; }
 
@@ -256,14 +256,14 @@ body[class*="_page_fundkit-"] {
 // DropdownMenu kebab. Defined here rather than per screen, because the first
 // screen to reuse the kebab without copying the rule got the component
 // library's default button size and stood a head taller than its own row.
-.fundkit-row-actions {
+.gratora-row-actions {
     display: flex;
     align-items: center;
     gap: 2px;
     justify-content: flex-end;
 }
 
-.fundkit-icon-btn {
+.gratora-icon-btn {
     appearance: none;
     border: 0;
     background: transparent;
@@ -279,7 +279,7 @@ body[class*="_page_fundkit-"] {
     &:hover { background: $bg-page; color: $text; }
 }
 
-.fundkit-row-actions .components-dropdown-menu__toggle {
+.gratora-row-actions .components-dropdown-menu__toggle {
     min-width: 28px;
     width: 28px;
     height: 28px;

@@ -145,27 +145,27 @@ export const inkPair = ( ground ) => {
 export function derivedInk( tokens = {} ) {
     const out = {};
 
-    const accent = inkPair( tokens[ 'fundkit-accent' ] );
+    const accent = inkPair( tokens[ 'gratora-accent' ] );
     if ( accent ) {
-        out[ '--fundkit-on-accent' ] = accent[ 0 ];
-        out[ '--fundkit-on-accent-muted' ] = accent[ 1 ];
-        out[ '--fundkit-on-accent-line' ] = accent[ 2 ];
+        out[ '--gratora-on-accent' ] = accent[ 0 ];
+        out[ '--gratora-on-accent-muted' ] = accent[ 1 ];
+        out[ '--gratora-on-accent-line' ] = accent[ 2 ];
     }
 
-    const soft = inkPair( tokens[ 'fundkit-bg-soft' ] );
+    const soft = inkPair( tokens[ 'gratora-bg-soft' ] );
     if ( soft ) {
-        out[ '--fundkit-on-soft' ] = soft[ 0 ];
-        out[ '--fundkit-on-soft-muted' ] = soft[ 1 ];
+        out[ '--gratora-on-soft' ] = soft[ 0 ];
+        out[ '--gratora-on-soft-muted' ] = soft[ 1 ];
 
-        const accentValue = tokens[ 'fundkit-accent' ];
-        const carries = ratio( accentValue, tokens[ 'fundkit-bg-soft' ] );
-        out[ '--fundkit-on-soft-accent' ] = carries !== null && carries >= 4.5 ? accentValue : soft[ 0 ];
+        const accentValue = tokens[ 'gratora-accent' ];
+        const carries = ratio( accentValue, tokens[ 'gratora-bg-soft' ] );
+        out[ '--gratora-on-soft-accent' ] = carries !== null && carries >= 4.5 ? accentValue : soft[ 0 ];
     }
 
-    const field = inkPair( tokens[ 'fundkit-field-bg' ] );
+    const field = inkPair( tokens[ 'gratora-field-bg' ] );
     if ( field ) {
-        out[ '--fundkit-on-field' ] = field[ 0 ];
-        out[ '--fundkit-on-field-muted' ] = field[ 1 ];
+        out[ '--gratora-on-field' ] = field[ 0 ];
+        out[ '--gratora-on-field-muted' ] = field[ 1 ];
     }
 
     return out;

@@ -1,6 +1,6 @@
 // Searchable select (combobox). Consumed by `SearchableSelect.jsx`.
 //
-// Children are matched as descendants of `.fundkit-searchable` (two-class
+// Children are matched as descendants of `.gratora-searchable` (two-class
 // specificity) rather than flat BEM. That is deliberate: inside the normal
 // WP admin chrome, core's `.wrap ul` / `.wrap ul li` rules out-specify a
 // single class and would otherwise repaint the dropdown list/options. Same
@@ -8,10 +8,10 @@
 
 @import '../tokens';
 
-.fundkit-searchable {
+.gratora-searchable {
     position: relative;
 
-    .fundkit-searchable__input {
+    .gratora-searchable__input {
         width: 100%;
         padding: 10px 36px 10px 12px;
         font-size: $text-md;
@@ -35,7 +35,7 @@
         }
     }
 
-    .fundkit-searchable__chevron {
+    .gratora-searchable__chevron {
         position: absolute;
         right: 12px;
         top: 50%;
@@ -45,9 +45,9 @@
         display: inline-flex;
         transition: transform .15s ease;
     }
-    &.is-open .fundkit-searchable__chevron { transform: translateY(-50%) rotate(180deg); }
+    &.is-open .gratora-searchable__chevron { transform: translateY(-50%) rotate(180deg); }
 
-    .fundkit-searchable__list {
+    .gratora-searchable__list {
         position: absolute;
         top: calc(100% + 4px);
         left: 0;
@@ -64,7 +64,7 @@
         z-index: $z-popover;
     }
 
-    .fundkit-searchable__option {
+    .gratora-searchable__option {
         margin: 0;
         padding: 8px 10px;
         border-radius: $radius-sm;
@@ -81,8 +81,8 @@
         &.is-current { color: $accent-dark; font-weight: $weight-medium; }
     }
 
-    .fundkit-searchable__label { flex: 1; }
-    .fundkit-searchable__hint {
+    .gratora-searchable__label { flex: 1; }
+    .gratora-searchable__hint {
         font-size: $text-xs;
         color: $text-soft;
         font-family: $font-mono;

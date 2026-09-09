@@ -14,7 +14,7 @@ export const Exports = {
     const names = Object.keys( UI ).sort();
     return (
       <div style={ { fontFamily: 'system-ui, sans-serif', maxWidth: 720 } }>
-        <h2 style={ { margin: '0 0 4px' } }>@fundkit/ui</h2>
+        <h2 style={ { margin: '0 0 4px' } }>@gratora/ui</h2>
         <p style={ { color: '#6b7280', margin: '0 0 16px' } }>
           { names.length } exports.
         </p>

@@ -12,17 +12,17 @@
 export default function EmptyState( { icon, title, body, action, compact = false } ) {
     return (
         <div
-            className={ `fundkit-empty-state${ compact ? ' fundkit-empty-state--compact' : '' }` }
+            className={ `gratora-empty-state${ compact ? ' gratora-empty-state--compact' : '' }` }
             role="status"
         >
             { icon && (
-                <span className="fundkit-empty-state__icon" aria-hidden="true">
+                <span className="gratora-empty-state__icon" aria-hidden="true">
                     { icon }
                 </span>
             ) }
-            { title && <div className="fundkit-empty-state__title">{ title }</div> }
-            { body && <div className="fundkit-empty-state__body">{ body }</div> }
-            { action && <div className="fundkit-empty-state__action">{ action }</div> }
+            { title && <div className="gratora-empty-state__title">{ title }</div> }
+            { body && <div className="gratora-empty-state__body">{ body }</div> }
+            { action && <div className="gratora-empty-state__action">{ action }</div> }
         </div>
     );
 }

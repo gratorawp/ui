@@ -1,7 +1,7 @@
 // Shared empty-state block. Imported by panels that need a friendlier
 // "no data yet" treatment than a bare line of text.
 
-.fundkit-empty-state {
+.gratora-empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,11 +1,11 @@
 /**
- * @fundkit/ui — public barrel.
+ * @gratora/ui — public barrel.
  *
  * Components are compiled to dist/ on publish. Import from the package root:
  *
- *   import { Btn, Card, MetricCard } from '@fundkit/ui';
+ *   import { Btn, Card, MetricCard } from '@gratora/ui';
  *
- * SCSS lives under `@fundkit/ui/scss/*` and is imported from page-level
+ * SCSS lives under `@gratora/ui/scss/*` and is imported from page-level
  * stylesheets, not from here.
  */
 

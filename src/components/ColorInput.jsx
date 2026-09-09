@@ -13,24 +13,24 @@ export default function ColorInput( { value, onChange, label } ) {
 
     return (
         <Dropdown
-            contentClassName="fundkit-color-picker-popover"
+            contentClassName="gratora-color-picker-popover"
             popoverProps={ { placement: 'bottom-start' } }
             renderToggle={ ( { isOpen, onToggle } ) => (
-                <span className="fundkit-color-control">
+                <span className="gratora-color-control">
                     <button
                         type="button"
-                        className="fundkit-color"
+                        className="gratora-color"
                         onClick={ onToggle }
                         aria-expanded={ isOpen }
-                        aria-label={ label || current || __( 'Pick a color', 'fundkit-fundraising-campaigns' ) }
+                        aria-label={ label || current || __( 'Pick a color', 'gratora-fundraising-campaigns' ) }
                     >
                         <span
-                            className="fundkit-color__swatch"
+                            className="gratora-color__swatch"
                             style={ { background: current || 'transparent' } }
                             aria-hidden="true"
                         />
                         { current && (
-                            <span className="fundkit-color__hex">
+                            <span className="gratora-color__hex">
                                 { current.toUpperCase() }
                             </span>
                         ) }
@@ -38,15 +38,15 @@ export default function ColorInput( { value, onChange, label } ) {
                     { current && (
                         <button
                             type="button"
-                            className="fundkit-color__clear"
+                            className="gratora-color__clear"
                             onClick={ () => onChange( '' ) }
                             aria-label={ label
                                 ? sprintf(
                                     /* translators: %s: what the colour is for, e.g. Button background */
-                                    __( 'Clear %s', 'fundkit-fundraising-campaigns' ),
+                                    __( 'Clear %s', 'gratora-fundraising-campaigns' ),
                                     label
                                 )
-                                : __( 'Clear color', 'fundkit-fundraising-campaigns' ) }
+                                : __( 'Clear color', 'gratora-fundraising-campaigns' ) }
                         >
                             <Icon name="close" size={ 14 } aria-hidden="true" />
                         </button>

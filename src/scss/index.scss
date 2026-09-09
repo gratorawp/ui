@@ -1,8 +1,8 @@
-// @fundkit/ui — full stylesheet barrel.
+// @gratora/ui — full stylesheet barrel.
 //
 // Tokens come first (every partial references the $-variables defined there),
 // then each component partial. Consumers can either @import this whole file or
-// cherry-pick `@fundkit/ui/scss/components/<name>` after importing tokens.
+// cherry-pick `@gratora/ui/scss/components/<name>` after importing tokens.
 
 @import 'tokens';
 
