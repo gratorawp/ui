@@ -1,7 +1,7 @@
 {
   "name": "@gratora/ui",
-  "version": "1.0.0",
-  "description": "Gratora design system \u2014 shared admin UI components, tokens, and widgets.",
+  "version": "1.1.0",
+  "description": "Gratora design system: shared admin UI components, tokens, and widgets.",
   "license": "GPL-2.0-or-later",
   "repository": {
     "type": "git",
@@ -35,12 +35,16 @@
     "build-storybook": "storybook build",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "build": "babel src --out-dir dist --extensions .js,.jsx --ignore \"src/**/*.stories.jsx\"",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "test": "npm run test:west && npm run test:east",
+    "test:west": "TZ=America/Los_Angeles jest --testPathIgnorePatterns '/node_modules/' 'format.east'",
+    "test:east": "TZ=Europe/Zagreb jest tests/format.east.test.js"
   },
   "peerDependencies": {
     "@dnd-kit/core": ">=6",
     "@dnd-kit/sortable": ">=10",
     "@dnd-kit/utilities": ">=3",
+    "@wordpress/api-fetch": ">=7",
     "@wordpress/components": ">=28",
     "@wordpress/date": ">=5",
     "@wordpress/element": ">=6",
@@ -58,6 +62,7 @@
     "@storybook/addon-essentials": "^8.4.0",
     "@storybook/react": "^8.4.0",
     "@storybook/react-vite": "^8.4.0",
+    "@wordpress/api-fetch": "^7.0.0",
     "@wordpress/babel-preset-default": "^8.0.0",
     "@wordpress/components": "^28.0.0",
     "@wordpress/date": "^5.0.0",
@@ -66,6 +71,8 @@
     "@wordpress/i18n": "^5.0.0",
     "@wordpress/icons": "^10.0.0",
     "eslint": "^8.57.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "lucide-react": "^1.16.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",

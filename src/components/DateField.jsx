@@ -1,6 +1,7 @@
 import { Dropdown, DatePicker, DateTimePicker, Button } from '@wordpress/components';
 import { dateI18n } from '@wordpress/date';
 import { __ } from '@wordpress/i18n';
+import { parseTimestamp } from '../utils/format';
 
 /**
  * Date (or date + time) input that looks like a .gratora-input and opens a WP
@@ -116,13 +117,12 @@ export default function DateField( {
  * either offset is, because the render undoes exactly the shift applied here.
  */
 function anchorNoon( value, settings ) {
-    const parts = String( value ).slice( 0, 10 ).split( '-' ).map( Number );
-    if ( parts.length !== 3 || parts.some( Number.isNaN ) ) return value;
+    const at = parseTimestamp( String( value ).slice( 0, 10 ) );
+    if ( Number.isNaN( at.getTime() ) ) return value;
 
     const offset = Number( settings?.timezone?.offset ?? 0 );
-    const [ y, m, d ] = parts;
 
-    return new Date( Date.UTC( y, m - 1, d, 12 - offset ) );
+    return new Date( at.getTime() - offset * 3600000 );
 }
 
 function normalise( next, withTime ) {

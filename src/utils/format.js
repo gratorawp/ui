@@ -1,5 +1,3 @@
-import { __, sprintf } from '@wordpress/i18n';
-
 // Read lazily so runtime overrides are picked up at call time, not module load.
 export function defaultCurrency() {
     if ( typeof window !== 'undefined' && window.gratora?.default_currency ) {
@@ -16,7 +14,10 @@ const DEFAULT_NUMBER_FORMAT = {
     symbol:         '',
 };
 
-const FALLBACK_SYMBOLS = {
+// ISO 4217 to symbol, kept in step with Money::SYMBOLS so a screen and the
+// receipt it links to name the same currency. A code that is not here renders
+// as itself, which is honest; borrowing another currency's symbol is not.
+export const CURRENCY_SYMBOLS = {
     USD: '$', EUR: '€', GBP: '£', AUD: 'A$', CAD: 'C$', CHF: 'CHF',
     JPY: '¥', CNY: '¥', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł',
     CZK: 'Kč', HUF: 'Ft', BRL: 'R$', MXN: 'Mex$', INR: '₹', NZD: 'NZ$',
@@ -49,10 +50,6 @@ let activeOverride = null;
 
 export function setActiveNumberFormat( fmt ) {
     activeOverride = fmt && typeof fmt === 'object' ? { ...fmt } : null;
-}
-
-export function getActiveNumberFormat() {
-    return numberFormat();
 }
 
 // Returns { decimalPlaces, decimalSep, thousandSep, symbolPosition, symbol }:
@@ -88,8 +85,8 @@ export function formatAmount( cents, currency = '', opts = {} ) {
     const number        = groupDigits( amount, fmt.thousandSep, fmt.decimalSep, decimalPlaces );
     // For non-default currencies fall back to the static table (injected symbol is default-currency only).
     const symbol = activeOverride
-        ? ( FALLBACK_SYMBOLS[ code ] || fmt.symbol || code )
-        : ( ( code === defaultCurrency() && fmt.symbol ) ? fmt.symbol : ( FALLBACK_SYMBOLS[ code ] || code ) );
+        ? ( CURRENCY_SYMBOLS[ code ] || fmt.symbol || code )
+        : ( ( code === defaultCurrency() && fmt.symbol ) ? fmt.symbol : ( CURRENCY_SYMBOLS[ code ] || code ) );
 
     return fmt.symbolPosition === 'after'
         ? `${ number } ${ symbol }`
@@ -137,11 +134,42 @@ export function parseAmount( raw ) {
     return Number.isFinite( n ) ? n : 0;
 }
 
-// DB timestamps are "YYYY-MM-DD HH:MM:SS" in UTC with no zone marker, which
-// the browser would otherwise read as local time. Mark them UTC; leave values
-// that already carry a zone, or are date-only, untouched.
+// Dates follow the site language, which the page states on <html lang>, rather
+// than the browser's own: an operator reading a Croatian admin expects Croatian
+// months whatever their browser is set to.
+function locale() {
+    if ( typeof document === 'undefined' ) return undefined;
+
+    const lang = document.documentElement?.lang;
+    if ( typeof lang !== 'string' || lang === '' ) return undefined;
+
+    // WordPress locales like pt_PT_ao90 reach <html lang> as pt-PT-ao90, which
+    // Intl rejects. A refused tag must cost the page its month names, not its
+    // dates, so fall back to the browser's own.
+    const tag = lang.replace( /_/g, '-' );
+    try {
+        Intl.DateTimeFormat.supportedLocalesOf( tag );
+        return tag;
+    } catch ( _ ) {
+        return undefined;
+    }
+}
+
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+
+// DB timestamps are "YYYY-MM-DD HH:MM:SS" in UTC with no zone marker, which the
+// browser would otherwise read as local time. Mark those UTC and leave values
+// carrying a zone alone. A date-only value is a calendar day rather than an
+// instant, so anchor it away from midnight: read as UTC midnight it renders as
+// the day before anywhere west of Greenwich.
 export function parseTimestamp( iso ) {
-    const s        = String( iso ).trim();
+    const s = String( iso ).trim();
+
+    if ( DATE_ONLY.test( s ) ) {
+        const [ y, m, d ] = s.split( '-' ).map( Number );
+        return new Date( Date.UTC( y, m - 1, d, 12 ) );
+    }
+
     const hasTime  = /\d{2}:\d{2}/.test( s );
     const hasZone  = /[zZ]$|[+-]\d{2}:?\d{2}$/.test( s );
     let normalized = s.replace( ' ', 'T' );
@@ -149,28 +177,83 @@ export function parseTimestamp( iso ) {
     return new Date( normalized );
 }
 
-export function formatDate( iso ) {
-    if ( ! iso ) return '-';
-    const d = parseTimestamp( iso );
-    if ( Number.isNaN( d.getTime() ) ) return iso;
-    return d.toLocaleDateString( undefined, {
-        year:  'numeric',
-        month: 'short',
-        day:   '2-digit',
+function render( iso, empty, options ) {
+    if ( ! iso ) return empty;
+    const at = parseTimestamp( iso );
+    if ( Number.isNaN( at.getTime() ) ) return iso;
+
+    // A calendar day has no clock reading, and asking for one renders the
+    // anchor parseTimestamp put there.
+    if ( ! DATE_ONLY.test( String( iso ).trim() ) ) {
+        return new Intl.DateTimeFormat( locale(), options ).format( at );
+    }
+
+    const { hour, minute, ...day } = options;
+    if ( Object.keys( day ).length === 0 ) return empty;
+
+    return new Intl.DateTimeFormat( locale(), day ).format( at );
+}
+
+export function formatDate( iso, { empty = '-' } = {} ) {
+    return render( iso, empty, { year: 'numeric', month: 'short', day: '2-digit' } );
+}
+
+export function formatDateTime( iso, { empty = '-' } = {} ) {
+    return render( iso, empty, {
+        month: 'short', day: '2-digit', year: 'numeric',
+        hour:  '2-digit', minute: '2-digit',
     } );
 }
 
-export function timeAgo( iso ) {
-    if ( ! iso ) return '-';
-    const d = parseTimestamp( iso );
-    if ( Number.isNaN( d.getTime() ) ) return iso;
-    const diff = Math.max( 0, ( Date.now() - d.getTime() ) / 1000 );
-    if ( diff < 60 )      return __( 'just now', 'gratora-fundraising-campaigns' );
-    /* translators: %d: number of minutes */
-    if ( diff < 3600 )    return sprintf( __( '%dm ago', 'gratora-fundraising-campaigns' ),  Math.floor( diff / 60 ) );
-    /* translators: %d: number of hours */
-    if ( diff < 86400 )   return sprintf( __( '%dh ago', 'gratora-fundraising-campaigns' ),  Math.floor( diff / 3600 ) );
-    /* translators: %d: number of days */
-    if ( diff < 604800 )  return sprintf( __( '%dd ago', 'gratora-fundraising-campaigns' ),  Math.floor( diff / 86400 ) );
-    return formatDate( iso );
+export function formatDayMonth( iso, { empty = '-' } = {} ) {
+    return render( iso, empty, { month: 'short', day: '2-digit' } );
+}
+
+export function formatDayMonthYear( iso, { empty = '-' } = {} ) {
+    return render( iso, empty, { day: 'numeric', month: 'short', year: 'numeric' } );
+}
+
+export function formatMonth( iso, { empty = '-' } = {} ) {
+    return render( iso, empty, { month: 'short', year: 'numeric' } );
+}
+
+export function formatTime( iso, { empty = '-' } = {} ) {
+    return render( iso, empty, { hour: '2-digit', minute: '2-digit' } );
+}
+
+// 'always' keeps a column uniform: under 'auto' a single week reads "last wk."
+// beside its neighbours' "3w ago". Zero seconds is the exception, where 'auto'
+// is the only way to say "now" instead of "in 0 seconds".
+function relative( numeric ) {
+    return new Intl.RelativeTimeFormat( locale(), { numeric, style: 'narrow' } );
+}
+
+// Whole months and years rather than mean ones: a stamp 30 days old reads
+// "1mo ago", which is the boundary every consumer shipped before this module.
+const RELATIVE_UNITS = [
+    [ 'year',   31536000 ],
+    [ 'month',  2592000 ],
+    [ 'week',   604800 ],
+    [ 'day',    86400 ],
+    [ 'hour',   3600 ],
+    [ 'minute', 60 ],
+];
+
+export function timeAgo( iso, { empty = '-' } = {} ) {
+    if ( ! iso ) return empty;
+    const at = parseTimestamp( iso );
+    if ( Number.isNaN( at.getTime() ) ) return iso;
+
+    const elapsed = ( Date.now() - at.getTime() ) / 1000;
+    // "in 3 days" is not what a log column is asking, and a minute of the two
+    // clocks disagreeing is not the future. Past that, state the date.
+    if ( elapsed < -60 ) return formatDate( iso );
+
+    const seconds = Math.max( 0, elapsed );
+
+    for ( const [ unit, size ] of RELATIVE_UNITS ) {
+        if ( seconds >= size ) return relative( 'always' ).format( -Math.floor( seconds / size ), unit );
+    }
+
+    return relative( 'auto' ).format( 0, 'second' );
 }

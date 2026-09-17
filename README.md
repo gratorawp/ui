@@ -19,7 +19,7 @@ This is what keeps every product built on it visually identical.
 - `src/widgets/` — dashboard widgets (MetricCard, WidgetGrid, RevenueChart, ...).
 - `src/styling/` — the brand-panel preview machinery (StylePreview, TokenEditor).
 - `src/scss/` — tokens + per-component SCSS partials.
-- `src/utils/` — `format`, `currency`, `countries`, and the `notify` toast store.
+- `src/utils/`: `format` (money and every date shape), `currency`, `countries`, `text`, `download`, `rest`, and the `notify` toast store.
 
 ## Consuming it
 
@@ -30,7 +30,7 @@ imports plain JS and needs no build configuration for it. SCSS ships as
 Install (git tag, no npm registry yet):
 
 ```sh
-npm install "git+https://github.com/gratorawp/ui.git#v0.4.0"
+npm install "git+https://github.com/gratorawp/ui.git#v1.1.0"
 ```
 
 Name the URL in full rather than the `gratorawp/ui#tag` shorthand: npm expands the

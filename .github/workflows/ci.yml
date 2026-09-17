@@ -1,6 +1,6 @@
 name: CI
 
-# Lint and build on every push and pull request. The package ships compiled
+# Lint, test and build on every push and pull request. The package ships compiled
 # JS, so a build that fails here is a build that fails inside every consumer's
 # install: `prepare` is what produces dist/ when a plugin installs this from a
 # git tag, and nothing else runs it.
@@ -12,7 +12,7 @@ on:
 
 jobs:
   check:
-    name: Lint and build
+    name: Lint, test and build
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +27,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Test
+        run: npm test
 
       # `npm ci` already ran this through prepare; running it again on its own
       # is what proves the script a consumer depends on still works.

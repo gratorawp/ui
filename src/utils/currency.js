@@ -43,7 +43,7 @@ export function separatorsFor( format ) {
 }
 
 // Format a number with thousand separators; no symbol or sign.
-export function groupDigits( amount, format = 'us', decimalPlaces = 0 ) {
+export function groupDigitsForPreset( amount, format = 'us', decimalPlaces = 0 ) {
     if ( amount === '' || amount === null || amount === undefined ) return '';
     const n = Number( amount );
     if ( ! Number.isFinite( n ) ) return '';

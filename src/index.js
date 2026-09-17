@@ -1,5 +1,5 @@
 /**
- * @gratora/ui — public barrel.
+ * @gratora/ui public barrel.
  *
  * Components are compiled to dist/ on publish. Import from the package root:
  *
@@ -45,7 +45,7 @@ export { default as MetricCard, ComparisonBadge } from './widgets/MetricCard';
 export { default as RevenueChart } from './widgets/RevenueChart';
 export { default as Widget, WidgetCard } from './widgets/Widget';
 export { default as WidgetGrid } from './widgets/WidgetGrid';
-// widgets/SectionBar is the dashboard range bar — distinct from the primitive
+// widgets/SectionBar is the dashboard range bar, distinct from the primitive
 // SectionBar above, so it's exported under a clearer name.
 export { default as DashboardSectionBar, RANGE_OPTIONS } from './widgets/SectionBar';
 export * from './widgets/icons';
@@ -58,4 +58,7 @@ export { default as TokenEditor } from './styling/TokenEditor';
 export * from './utils/format';
 export * from './utils/currency';
 export * from './utils/countries';
+export * from './utils/text';
+export * from './utils/download';
+export * from './utils/rest';
 export { notify, subscribe, dismiss } from './utils/notify';
