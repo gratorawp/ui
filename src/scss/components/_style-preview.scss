@@ -215,7 +215,9 @@
         border-radius: var(--gratora-radius-sm, 6px);
         background: var(--gratora-field-bg, #fff);
         color: var(--gratora-on-field, var(--gratora-text, #111827));
-        font-size: 12px;
+        // The published input is the one text there that follows Base font
+        // size, so it is the one here that does, at the preview's scale.
+        font-size: calc(var(--gratora-type-size, 15px) * .8);
         line-height: 1.4;
         white-space: nowrap;
         overflow: hidden;
