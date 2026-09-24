@@ -3,10 +3,12 @@
  */
 export function Switch( { checked, onChange, disabled, label, id } ) {
     return (
-        <label className="gratora-switch" aria-label={ label }>
+        <label className="gratora-switch">
             <input
                 id={ id }
                 type="checkbox"
+                role="switch"
+                aria-label={ label }
                 checked={ !! checked }
                 disabled={ !! disabled }
                 onChange={ ( e ) => onChange && onChange( e.target.checked ) }

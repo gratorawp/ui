@@ -10,7 +10,14 @@
     flex-shrink: 0;
     cursor: pointer;
 
-    input { display: none; }
+    // Invisible, not removed, so Tab still reaches it and Space toggles it.
+    input {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: inherit;
+    }
 
     &__track {
         position: absolute;
@@ -35,6 +42,7 @@
 
     input:checked ~ &__track { background: $accent; }
     input:checked ~ &__track::after { transform: translateX(14px); }
+    input:focus-visible ~ &__track { outline: 2px solid $accent; outline-offset: 2px; }
 }
 
 // Toggle row: title + sub on the left, the Switch on the right. Lives with
