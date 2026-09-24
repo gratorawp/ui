@@ -54,7 +54,10 @@ function channel( n ) {
     return Math.round( Number( n.toPrecision( 15 ) ) );
 }
 
-const NUMERIC = /^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/;
+const NUMBER = '[+-]?(?:\\d+\\.?\\d*|\\.\\d+)';
+const HUE = new RegExp( `^(${ NUMBER })(deg|grad|rad|turn)?$`, 'i' );
+const PERCENT = new RegExp( `^(${ NUMBER })%?$` );
+const PER_DEGREE = { deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 };
 
 /**
  * A theme.json palette states its colours in whatever CSS accepts, and a ground
@@ -64,15 +67,15 @@ function fromHsl( parts ) {
     const bits = parts.split( /[\s,/]+/ ).filter( Boolean ).slice( 0, 3 );
     if ( bits.length < 3 ) return null;
 
-    const bare = bits.map( ( b ) => b.replace( /[%deg]+$/, '' ) );
-    if ( ! bare.every( ( b ) => NUMERIC.test( b ) ) ) return null;
+    const hue = angle( bits[ 0 ] );
+    const sat = percent( bits[ 1 ] );
+    const light = percent( bits[ 2 ] );
+    if ( hue === null || sat === null || light === null ) return null;
 
-    const num = bare.map( Number );
-
-    let h = num[ 0 ] % 360;
+    let h = hue % 360;
     if ( h < 0 ) h += 360;
-    const s = Math.max( 0, Math.min( 100, num[ 1 ] ) ) / 100;
-    const l = Math.max( 0, Math.min( 100, num[ 2 ] ) ) / 100;
+    const s = Math.max( 0, Math.min( 100, sat ) ) / 100;
+    const l = Math.max( 0, Math.min( 100, light ) ) / 100;
 
     const c = ( 1 - Math.abs( 2 * l - 1 ) ) * s;
     const x = c * ( 1 - Math.abs( ( ( h / 60 ) % 2 ) - 1 ) );
@@ -82,6 +85,23 @@ function fromHsl( parts ) {
         [ c, x, 0 ], [ x, c, 0 ], [ 0, c, x ],
         [ 0, x, c ], [ x, 0, c ], [ c, 0, x ],
     ][ Math.floor( h / 60 ) % 6 ].map( ( n ) => channel( ( n + m ) * 255 ) );
+}
+
+/** Degrees, or null. */
+function angle( bit ) {
+    if ( bit.toLowerCase() === 'none' ) return 0;
+
+    const m = HUE.exec( bit );
+    if ( ! m ) return null;
+
+    return Number( m[ 1 ] ) * PER_DEGREE[ ( m[ 2 ] || 'deg' ).toLowerCase() ];
+}
+
+function percent( bit ) {
+    if ( bit.toLowerCase() === 'none' ) return 0;
+
+    const m = PERCENT.exec( bit );
+    return m ? Number( m[ 1 ] ) : null;
 }
 
 export function luminance( value ) {
