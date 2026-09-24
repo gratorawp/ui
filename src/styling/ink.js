@@ -140,19 +140,52 @@ export function bestOn( ground ) {
     return ink === null ? null : ratio( ground, ink );
 }
 
-const ON_LIGHT_MUTED = 'rgba(16,22,42,.62)';
-const ON_DARK_MUTED  = 'rgba(255,255,255,.72)';
-const ON_LIGHT_LINE  = 'rgba(16,22,42,.16)';
-const ON_DARK_LINE   = 'rgba(255,255,255,.26)';
+const ON_LIGHT_LINE = 'rgba(16,22,42,.16)';
+const ON_DARK_LINE  = 'rgba(255,255,255,.26)';
 
+/** The alpha muted ink starts from, in hundredths. */
+const MUTED_FROM = { [ ON_DARK ]: 72, [ ON_LIGHT ]: 62 };
+
+/** Ink, muted ink and hairline for a ground, or null when it cannot be read. */
 export const inkPair = ( ground ) => {
     const ink = inkOn( ground );
     if ( ink === null ) return null;
 
-    return ink === ON_DARK
-        ? [ ink, ON_DARK_MUTED, ON_DARK_LINE ]
-        : [ ink, ON_LIGHT_MUTED, ON_LIGHT_LINE ];
+    return [ ink, muted( ink, ground ), ink === ON_DARK ? ON_DARK_LINE : ON_LIGHT_LINE ];
 };
+
+/**
+ * The ink at the lowest alpha, from the shipped one up, whose composite on the
+ * ground reaches 4.5:1. Where none below opaque does, the ink itself.
+ */
+function muted( ink, ground ) {
+    const [ r, g, b ] = rgb( ink );
+
+    for ( let n = MUTED_FROM[ ink ]; n < 100; n++ ) {
+        if ( ratio( mix( ink, ground, n / 100 ), ground ) >= 4.5 ) {
+            return `rgba(${ r },${ g },${ b },.${ n % 10 === 0 ? n / 10 : n })`;
+        }
+    }
+
+    return ink;
+}
+
+const clamp = ( n ) => Math.max( 0, Math.min( 255, n ) );
+
+/**
+ * What color-mix(in srgb, a share, b) paints, as #rrggbb, or null when either
+ * colour cannot be read. The share is a's part, from 0 to 1.
+ */
+export function mix( a, b, share ) {
+    const x = rgb( a );
+    const y = rgb( b );
+    if ( ! x || ! y ) return null;
+
+    return '#' + x.map( ( c, i ) => {
+        const n = channel( share * clamp( c ) + ( 1 - share ) * clamp( y[ i ] ) );
+        return n.toString( 16 ).padStart( 2, '0' );
+    } ).join( '' );
+}
 
 /**
  * The properties Ink.php derives and emits alongside the authored map, keyed
