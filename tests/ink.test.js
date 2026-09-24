@@ -272,6 +272,48 @@ describe( 'translucent colours', () => {
     } );
 } );
 
+/** The keyboard ring on each ground, as Ink::ringDeclarations emits it. */
+describe( 'the keyboard ring', () => {
+    const SHIPPED = {
+        'gratora-accent':      '#211d3f',
+        'gratora-accent-soft': '#efedf8',
+        'gratora-text':        '#111827',
+        'gratora-text-muted':  '#6b7280',
+        'gratora-bg':          '#ffffff',
+        'gratora-field-bg':    '#ffffff',
+        'gratora-bg-soft':     '#f8fafb',
+    };
+    const rings = ( tokens ) => Object.fromEntries( Object.entries( derivedInk( tokens ) ).filter( ( [ k ] ) => k.endsWith( '-ring' ) ) );
+
+    test( 'is the accent as each ground reads it where nothing chose one', () => {
+        const expected = {
+            '--gratora-text-ring':      'var(--gratora-text-accent)',
+            '--gratora-on-bg-ring':     'var(--gratora-on-bg-accent)',
+            '--gratora-on-soft-ring':   'var(--gratora-on-soft-accent)',
+            '--gratora-on-accent-ring': 'var(--gratora-on-accent)',
+            '--gratora-on-field-ring':  'var(--gratora-on-field)',
+        };
+
+        expect( rings( SHIPPED ) ).toEqual( expected );
+        expect( rings( { ...SHIPPED, 'gratora-bg': '#15142b', 'gratora-accent': '#fde68a' } ) ).toEqual( expected );
+    } );
+
+    test( 'is the one the org chose only where it reads', () => {
+        expect( rings( { ...SHIPPED, 'gratora-accent': '#0f3d5c', 'gratora-focus-ring': '#0F3D5C', 'gratora-bg': '#f55151' } ) ).toEqual( {
+            '--gratora-text-ring':      'var(--gratora-focus-ring)',
+            '--gratora-on-bg-ring':     'var(--gratora-on-bg-accent)',
+            '--gratora-on-soft-ring':   'var(--gratora-focus-ring)',
+            '--gratora-on-accent-ring': 'var(--gratora-on-accent)',
+            '--gratora-on-field-ring':  'var(--gratora-focus-ring)',
+        } );
+    } );
+
+    test( 'leaves each ground its own where the chosen ring or the page cannot be read', () => {
+        expect( rings( { ...SHIPPED, 'gratora-focus-ring': 'transparent' } )[ '--gratora-text-ring' ] ).toBe( 'var(--gratora-text-accent)' );
+        expect( rings( { 'gratora-focus-ring': '#0f3d5c', 'gratora-text': 'inherit' } )[ '--gratora-text-ring' ] ).toBe( 'var(--gratora-text-accent)' );
+    } );
+} );
+
 /** The required marker on the page and on the card, as Ink::requiredDeclarations emits it. */
 describe( 'the required marker', () => {
     const PAGE_INK = { 'gratora-text': '#111827', 'gratora-text-muted': '#6b7280' };

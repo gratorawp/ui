@@ -281,7 +281,7 @@ export function derivedInk( tokens = {} ) {
         out[ '--gratora-on-field-muted' ] = field[ 1 ];
     }
 
-    return { ...out, ...groundInk( tokens ), ...requiredInk( tokens ) };
+    return { ...out, ...groundInk( tokens ), ...ringInk( tokens ), ...requiredInk( tokens ) };
 }
 
 /**
@@ -304,6 +304,27 @@ function groundInk( tokens ) {
         '--gratora-on-bg-accent':   carries( accent, card ) ? 'var(--gratora-accent)' : 'var(--gratora-on-bg)',
         '--gratora-on-accent-soft': carries( accent, tint ) ? 'var(--gratora-accent)' : ( inkOn( tint ) ?? 'var(--gratora-accent)' ),
     };
+}
+
+/**
+ * The keyboard ring on each ground, drawn outside a control on the ground
+ * around it: the ring the org chose where it reads there, else the accent as
+ * that ground reads it. The page is measured as the accent is.
+ */
+function ringInk( tokens ) {
+    const ring = tokens[ 'gratora-focus-ring' ] || '';
+    const grounds = {
+        'text-ring':      [ inkOn( tokens[ 'gratora-text' ] ), 'var(--gratora-text-accent)' ],
+        'on-bg-ring':     [ tokens[ 'gratora-bg' ], 'var(--gratora-on-bg-accent)' ],
+        'on-soft-ring':   [ tokens[ 'gratora-bg-soft' ], 'var(--gratora-on-soft-accent)' ],
+        'on-accent-ring': [ tokens[ 'gratora-accent' ], 'var(--gratora-on-accent)' ],
+        'on-field-ring':  [ tokens[ 'gratora-field-bg' ], 'var(--gratora-on-field)' ],
+    };
+
+    return Object.fromEntries( Object.entries( grounds ).map( ( [ name, [ ground, own ] ] ) => [
+        `--gratora-${ name }`,
+        ring !== '' && carries( ring, ground ) ? 'var(--gratora-focus-ring)' : own,
+    ] ) );
 }
 
 /** The required marker's colour, as --gratora-required ships it. */
