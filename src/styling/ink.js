@@ -181,11 +181,10 @@ export function mix( a, b, share ) {
     const y = rgb( b );
     if ( ! x || ! y ) return null;
 
-    return '#' + x.map( ( c, i ) => {
-        const n = channel( share * clamp( c ) + ( 1 - share ) * clamp( y[ i ] ) );
-        return n.toString( 16 ).padStart( 2, '0' );
-    } ).join( '' );
+    return hexOf( x.map( ( c, i ) => channel( share * clamp( c ) + ( 1 - share ) * clamp( y[ i ] ) ) ) );
 }
+
+const hexOf = ( channels ) => '#' + channels.map( ( n ) => clamp( n ).toString( 16 ).padStart( 2, '0' ) ).join( '' );
 
 /** Whether ink reaches 4.5:1 on a ground. An unreadable colour does not. */
 function carries( ink, ground ) {
@@ -226,7 +225,7 @@ export function derivedInk( tokens = {} ) {
         out[ '--gratora-on-field-muted' ] = field[ 1 ];
     }
 
-    return { ...out, ...groundInk( tokens ) };
+    return { ...out, ...groundInk( tokens ), ...requiredInk( tokens ) };
 }
 
 /**
@@ -249,4 +248,42 @@ function groundInk( tokens ) {
         '--gratora-on-bg-accent':   carries( accent, card ) ? 'var(--gratora-accent)' : 'var(--gratora-on-bg)',
         '--gratora-on-accent-soft': carries( accent, tint ) ? 'var(--gratora-accent)' : ( inkOn( tint ) ?? 'var(--gratora-accent)' ),
     };
+}
+
+/** The required marker's colour, as --gratora-required ships it. */
+const REQUIRED = '#d63384';
+
+/** The share of it the stylesheet mixes toward the ink, in hundredths. */
+const REQUIRED_FROM = 72;
+
+/**
+ * The marker mixed toward the ink at the largest share, from the shipped one
+ * down, that reaches 4.5:1 on the ground. Where none does, the ink.
+ */
+function marker( ink, ground ) {
+    for ( let n = REQUIRED_FROM; n > 0; n-- ) {
+        const mixed = mix( REQUIRED, ink, n / 100 );
+        if ( carries( mixed, ground ) ) return mixed;
+    }
+
+    return hexOf( rgb( ink ) );
+}
+
+/**
+ * The required marker on the page and on the card, mixed toward the ink each
+ * reads. A ground that cannot be read measures nothing, and the stylesheet's
+ * own mix stands.
+ */
+function requiredInk( tokens ) {
+    const text = tokens[ 'gratora-text' ];
+    const card = tokens[ 'gratora-bg' ];
+    const out  = {};
+
+    const page = inkOn( text );
+    if ( page ) out[ '--gratora-text-required' ] = marker( text, page );
+
+    const onCard = inkOn( card );
+    if ( onCard ) out[ '--gratora-on-bg-required' ] = marker( carries( text, card ) ? text : onCard, card );
+
+    return out;
 }

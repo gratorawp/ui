@@ -187,3 +187,38 @@ describe( 'hsl hue units', () => {
         expect( rgb( 'hsl(d 60% 80%)' ) ).toBeNull();
     } );
 } );
+
+/** The required marker on the page and on the card, as Ink::requiredDeclarations emits it. */
+describe( 'the required marker', () => {
+    const PAGE_INK = { 'gratora-text': '#111827', 'gratora-text-muted': '#6b7280' };
+    const markers = ( tokens ) => {
+        const out = derivedInk( tokens );
+        return Object.fromEntries( Object.entries( out ).filter( ( [ k ] ) => k.endsWith( '-required' ) ) );
+    };
+
+    test( 'keeps its mix where it reads', () => {
+        expect( markers( { ...PAGE_INK, 'gratora-bg': '#15142b' } ) ).toEqual( {
+            '--gratora-text-required':  '#9f2b6a',
+            '--gratora-on-bg-required': '#e16ca6',
+        } );
+    } );
+
+    test( 'takes more ink on a card that defeats the mix', () => {
+        expect( markers( { ...PAGE_INK, 'gratora-bg': '#f55151' } )[ '--gratora-on-bg-required' ] ).toBe( '#321d37' );
+    } );
+
+    test( 'reads on every grey card, or is the ink itself where nothing lighter does', () => {
+        for ( let v = 0; v <= 255; v++ ) {
+            const card = hex( [ v, v, v ] );
+            const ink = ratio( '#111827', card ) >= 4.5 ? '#111827' : inkPair( card )[ 0 ];
+            const marker = markers( { ...PAGE_INK, 'gratora-bg': card } )[ '--gratora-on-bg-required' ];
+
+            expect( ratio( marker, card ) >= 4.5 || marker === ink ).toBe( true );
+        }
+    } );
+
+    test( 'measures nothing on a ground it cannot read', () => {
+        expect( markers( { 'gratora-text': 'inherit', 'gratora-bg': 'transparent' } ) ).toEqual( {} );
+        expect( markers( { 'gratora-text': 'inherit', 'gratora-bg': '#15142b' } ) ).toEqual( { '--gratora-on-bg-required': '#e16ca6' } );
+    } );
+} );
