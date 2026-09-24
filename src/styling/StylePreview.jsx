@@ -3,11 +3,15 @@
  * Tokens become inline CSS custom properties; changes are instant.
  *
  * Effective map = defaults + org-brand preset (unless layer='brand') + tokens.
+ *
+ * The page stands for the theme's, which paints nothing of the brand. The form
+ * sits on it unless `container` is 'frame', the form setting that paints the
+ * card (--gratora-bg) behind it.
  */
 
 import { __ } from '@wordpress/i18n';
 import { formatAmount, parseTimestamp } from '../utils/format';
-import { derivedInk, inkPair } from './ink';
+import { derivedInk } from './ink';
 
 const SAMPLE_CAMPAIGN = {
     title:        'Bring clean water to 1,000 villages',
@@ -22,11 +26,12 @@ const SAMPLE_CAMPAIGN = {
 };
 
 export default function StylePreview( {
-    tokens   = {},
-    presetId = '',
-    campaign = null,
-    layer    = 'campaign',
-    styling  = {},
+    tokens    = {},
+    presetId  = '',
+    campaign  = null,
+    layer     = 'campaign',
+    styling   = {},
+    container = 'plain',
 } ) {
     const frameStyle = resolveEffectiveStyle( { tokens, presetId, layer, styling } );
     const data       = campaign && campaign.id ? campaign : SAMPLE_CAMPAIGN;
@@ -94,47 +99,49 @@ export default function StylePreview( {
                             ) }
                         </div>
 
-                        <div className="gratora-style-preview__amounts">
-                            { presets.map( ( a, i ) => (
-                                <div
-                                    key={ i }
-                                    className={ `gratora-style-preview__amount${ i === selectedIdx ? ' is-sel' : '' }` }
-                                >
-                                    { formatAmount( a, currency ) }
-                                </div>
-                            ) ) }
-                        </div>
+                        <div className={ `gratora-style-preview__form${ container === 'frame' ? ' is-framed' : '' }` }>
+                            <div className="gratora-style-preview__amounts">
+                                { presets.map( ( a, i ) => (
+                                    <div
+                                        key={ i }
+                                        className={ `gratora-style-preview__amount${ i === selectedIdx ? ' is-sel' : '' }` }
+                                    >
+                                        { formatAmount( a, currency ) }
+                                    </div>
+                                ) ) }
+                            </div>
 
-                        <div className="gratora-style-preview__fields">
-                            <div className="gratora-style-preview__field">
-                                <span className="gratora-style-preview__field-label">
-                                    { __( 'Other amount', 'gratora-fundraising-campaigns' ) }
-                                </span>
-                                <div className="gratora-style-preview__field-box gratora-style-preview__field-box--amount is-focus">
-                                    { formatAmount( presets[ selectedIdx ], currency ) }
+                            <div className="gratora-style-preview__fields">
+                                <div className="gratora-style-preview__field">
+                                    <span className="gratora-style-preview__field-label">
+                                        { __( 'Other amount', 'gratora-fundraising-campaigns' ) }
+                                    </span>
+                                    <div className="gratora-style-preview__field-box gratora-style-preview__field-box--amount is-focus">
+                                        { formatAmount( presets[ selectedIdx ], currency ) }
+                                    </div>
+                                </div>
+
+                                <div className="gratora-style-preview__field">
+                                    <span className="gratora-style-preview__field-label">
+                                        { __( 'Full name', 'gratora-fundraising-campaigns' ) }
+                                    </span>
+                                    <div className="gratora-style-preview__field-box">
+                                        { __( 'Alex Morgan', 'gratora-fundraising-campaigns' ) }
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="gratora-style-preview__field">
-                                <span className="gratora-style-preview__field-label">
-                                    { __( 'Full name', 'gratora-fundraising-campaigns' ) }
-                                </span>
-                                <div className="gratora-style-preview__field-box">
-                                    { __( 'Alex Morgan', 'gratora-fundraising-campaigns' ) }
-                                </div>
+                            <div className="gratora-style-preview__cta">
+                                { __( 'Donate', 'gratora-fundraising-campaigns' ) }{ ' ' }
+                                { formatAmount( presets[ selectedIdx ], currency ) }
                             </div>
-                        </div>
 
-                        <div className="gratora-style-preview__cta">
-                            { __( 'Donate', 'gratora-fundraising-campaigns' ) }{ ' ' }
-                            { formatAmount( presets[ selectedIdx ], currency ) }
-                        </div>
-
-                        <div className="gratora-style-preview__meta">
-                            { donors > 0
-                                ? `${ donors } ${ donors === 1 ? __( 'donor', 'gratora-fundraising-campaigns' ) : __( 'donors', 'gratora-fundraising-campaigns' ) }`
-                                : __( 'No donors yet', 'gratora-fundraising-campaigns' ) }
-                            { endsAt && ` · ${ __( 'ends', 'gratora-fundraising-campaigns' ) } ${ shortDate( endsAt ) }` }
+                            <div className="gratora-style-preview__meta">
+                                { donors > 0
+                                    ? `${ donors } ${ donors === 1 ? __( 'donor', 'gratora-fundraising-campaigns' ) : __( 'donors', 'gratora-fundraising-campaigns' ) }`
+                                    : __( 'No donors yet', 'gratora-fundraising-campaigns' ) }
+                                { endsAt && ` · ${ __( 'ends', 'gratora-fundraising-campaigns' ) } ${ shortDate( endsAt ) }` }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -157,17 +164,12 @@ export function resolveEffectiveTokens( props = {} ) {
  * The map the page will paint: the authored cascade plus the derivations the
  * server applies on the way out, so the preview cannot promise a colour the
  * published page does not use.
- *
- * A surface that does not paint --gratora-bg passes paintsGround: false: ink
- * measured against a ground it never draws lands on whatever it draws instead.
  */
 export function resolveEffectiveStyle( props = {} ) {
-    const { paintsGround = true } = props;
     const { defaults, presetTokens, inline, layers } = cascade( props );
     const tokens = { ...defaults, ...presetTokens, ...inline };
 
     dropStalePairs( tokens, layers, defaults );
-    if ( paintsGround ) inkFollowsGround( tokens, presetTokens, inline, defaults );
 
     return { ...tokensToStyle( tokens ), ...derivedInk( tokens ) };
 }
@@ -255,25 +257,6 @@ function dropStalePairs( tokens, layers, defaults ) {
             : tokens[ key ] === defaults[ key ];
 
         if ( stale ) delete tokens[ key ];
-    }
-}
-
-/**
- * Body and muted ink track the background the same way: the shipped values are
- * chosen against a white page, so an org that colours the ground and says
- * nothing about the ink would get near-black on whatever it picked.
- */
-function inkFollowsGround( tokens, presetTokens, inline, defaults ) {
-    const ground = String( tokens[ 'gratora-bg' ] || '' );
-    if ( ground === '' || ground === defaults[ 'gratora-bg' ] ) return;
-
-    const on = inkPair( ground );
-    if ( ! on ) return;
-
-    const slots = { 'gratora-text': 0, 'gratora-text-muted': 1 };
-    for ( const key in slots ) {
-        const chosen = presetTokens[ key ] != null || inline[ key ] != null;
-        if ( ! chosen && tokens[ key ] === defaults[ key ] ) tokens[ key ] = on[ slots[ key ] ];
     }
 }
 

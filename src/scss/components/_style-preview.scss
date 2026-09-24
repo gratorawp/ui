@@ -58,8 +58,9 @@
         text-overflow: ellipsis;
     }
 
+    // Stands for the theme's page, which Gratora does not paint.
     &__page {
-        background: var(--gratora-bg, #fff);
+        background: #fff;
         color: var(--gratora-text, #111827);
         font-family: var(--gratora-typeface, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
         font-size: var(--gratora-type-size, 15px);
@@ -102,7 +103,18 @@
 
     &__body {
         padding: 16px;
+    }
+
+    // A framed form is the one card here, and ink on it is measured against it.
+    &__form.is-framed {
+        padding: 14px;
         background: var(--gratora-bg, #fff);
+        border-radius: var(--gratora-radius, 10px);
+        box-shadow: var(--gratora-card-shadow, none);
+        --gratora-text: var(--gratora-on-bg, #111827);
+        --gratora-text-muted: var(--gratora-on-bg-muted, #6b7280);
+        --gratora-text-accent: var(--gratora-on-bg-accent, var(--gratora-accent, #211d3f));
+        color: var(--gratora-text);
     }
 
     &__desc {
