@@ -166,20 +166,23 @@
         margin-bottom: 12px;
     }
 
+    // Borderless, with the selection an inset outline, as the published tiles.
     &__amount {
         padding: 8px 0;
-        border: var(--gratora-stroke, 1px) solid var(--gratora-border, #e5e7eb);
+        border: 0;
+        outline: 2px solid transparent;
+        outline-offset: -2px;
         border-radius: var(--gratora-radius-sm, 6px);
         background: var(--gratora-bg-soft, #f8fafb);
         text-align: center;
         font-size: 12px;
         color: var(--gratora-on-soft, var(--gratora-text, #111827));
         font-weight: 500;
-        transition: background .2s ease, border-color .2s ease;
+        transition: background .2s ease, outline-color .2s ease;
 
         &.is-sel {
+            outline-color: var(--gratora-accent, #211d3f);
             background: var(--gratora-accent-soft, #efedf8);
-            border-color: var(--gratora-accent, #211d3f);
             color: var(--gratora-on-accent-soft, var(--gratora-accent, #211d3f));
             font-weight: 600;
         }
