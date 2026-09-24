@@ -314,6 +314,33 @@ describe( 'the keyboard ring', () => {
     } );
 } );
 
+/** What a hovered tile and secondary button paint, as Ink::softDeclarations emits it. */
+describe( 'the soft hovers', () => {
+    const hovers = ( soft, border ) => {
+        const out = derivedInk( { 'gratora-bg-soft': soft, 'gratora-border': border, 'gratora-accent': '#211d3f' } );
+        return [ out[ '--gratora-soft-hover' ], out[ '--gratora-secondary-hover' ] ];
+    };
+
+    test( 'keep the fill the stylesheet paints where the ink reads', () => {
+        expect( hovers( '#221f3d', '#3a3660' ) ).toEqual( [ '#34314d', mix( '#3a3660', '#221f3d', 0.45 ) ] );
+    } );
+
+    test( 'move away from ink the tile would lose, and the button takes the tile', () => {
+        expect( hovers( '#e8590c', '#e5e7eb' )[ 0 ] ).toBe( mix( '#ffffff', '#e8590c', 0.08 ) );
+        expect( hovers( '#221f3d', '#e5e7eb' )[ 1 ] ).toBe( '#34314d' );
+    } );
+
+    test( 'read on every grey where the rest does', () => {
+        for ( let v = 0; v <= 255; v++ ) {
+            const grey = hex( [ v, v, v ] );
+            const ink = inkPair( grey )[ 0 ];
+            if ( ratio( ink, grey ) < 4.5 ) continue;
+
+            hovers( grey, '#e5e7eb' ).forEach( ( fill ) => expect( ratio( ink, fill ) ).toBeGreaterThanOrEqual( 4.5 ) );
+        }
+    } );
+} );
+
 /** A hovered button's ink, as Ink::hoverDeclarations emits it. */
 describe( 'the hovered button', () => {
     test.each( [

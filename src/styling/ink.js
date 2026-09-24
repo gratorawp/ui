@@ -273,6 +273,7 @@ export function derivedInk( tokens = {} ) {
         out[ '--gratora-on-soft' ] = soft[ 0 ];
         out[ '--gratora-on-soft-muted' ] = soft[ 1 ];
         out[ '--gratora-on-soft-accent' ] = carries( accentValue, tokens[ 'gratora-bg-soft' ] ) ? accentValue : soft[ 0 ];
+        Object.assign( out, softHovers( tokens, soft[ 0 ] ) );
     }
 
     const field = inkPair( tokens[ 'gratora-field-bg' ] );
@@ -282,6 +283,26 @@ export function derivedInk( tokens = {} ) {
     }
 
     return { ...out, ...groundInk( tokens ), ...ringInk( tokens ), ...hoverInk( tokens ), ...requiredInk( tokens ) };
+}
+
+/**
+ * What a hovered tile and a hovered secondary button paint. The tile moves its
+ * fill 8% toward its ink and the button mixes in 45% of the border, which on a
+ * mid-tone ground can take the ink under 4.5:1: there the tile moves toward
+ * the other ink instead, and the button paints the tile's.
+ */
+function softHovers( tokens, ink ) {
+    const soft = tokens[ 'gratora-bg-soft' ];
+    let tile = mix( ink, soft, 0.08 );
+    if ( ! tile || ! carries( ink, tile ) ) tile = mix( ink === ON_DARK ? ON_LIGHT : ON_DARK, soft, 0.08 );
+    if ( ! tile ) return {};
+
+    const button = mix( tokens[ 'gratora-border' ], soft, 0.45 );
+
+    return {
+        '--gratora-soft-hover':      tile,
+        '--gratora-secondary-hover': button && carries( ink, button ) ? button : tile,
+    };
 }
 
 /**
