@@ -152,8 +152,9 @@
         color: var(--gratora-text-muted, #6b7280);
         margin-bottom: 14px;
 
+        // The published raised figure is the accent, measured as text.
         strong {
-            color: var(--gratora-text, #111827);
+            color: var(--gratora-text-accent, var(--gratora-accent, #211d3f));
             font-weight: 600;
         }
     }
@@ -179,7 +180,7 @@
         &.is-sel {
             background: var(--gratora-accent-soft, #efedf8);
             border-color: var(--gratora-accent, #211d3f);
-            color: var(--gratora-accent, #34306b);
+            color: var(--gratora-on-accent-soft, var(--gratora-accent, #211d3f));
             font-weight: 600;
         }
     }
