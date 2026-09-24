@@ -67,23 +67,21 @@
         font-weight: var(--gratora-body-weight, 400);
     }
 
+    // The live cover: the photo under its scrim, or without one a flat accent
+    // band with ink measured against the accent.
     &__hero {
         position: relative;
         height: 140px;
         overflow: hidden;
-        background:
-            linear-gradient(135deg,
-                color-mix(in srgb, var(--gratora-accent, #211d3f) 20%, #f5d97f),
-                color-mix(in srgb, var(--gratora-accent, #211d3f) 60%, #e8b94c) 60%,
-                var(--gratora-accent, #211d3f));
+        background-color: var(--gratora-accent, #211d3f);
         background-size: cover;
         background-position: center;
 
-        &::after {
+        &.is-photo::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, .35) 100%);
+            background: linear-gradient(180deg, rgba(6, 10, 20, .10) 0%, rgba(6, 10, 20, .55) 58%, rgba(6, 10, 20, .84) 100%);
         }
     }
 
@@ -97,8 +95,11 @@
         font-weight: var(--gratora-heading-weight, 600);
         letter-spacing: -0.01em;
         z-index: 2;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
         font-family: var(--gratora-typeface, inherit);
+    }
+
+    &__hero.is-accent &__hero-title {
+        color: var(--gratora-on-accent, #fff);
     }
 
     &__body {

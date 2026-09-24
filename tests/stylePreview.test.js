@@ -64,6 +64,22 @@ afterEach( () => {
 
 const PHOTO = { id: 4, title: 'Wells', image_url: 'https://example.com/well.jpg' };
 
+describe( 'the hero', () => {
+    test( 'is the accent band without a photo', () => {
+        const hero = mount().querySelector( '.gratora-style-preview__hero' );
+
+        expect( hero.classList.contains( 'is-accent' ) ).toBe( true );
+        expect( hero.classList.contains( 'is-photo' ) ).toBe( false );
+    } );
+
+    test( 'is the photo when the campaign has one', () => {
+        const hero = mount( { campaign: PHOTO } ).querySelector( '.gratora-style-preview__hero' );
+
+        expect( hero.classList.contains( 'is-photo' ) ).toBe( true );
+        expect( hero.classList.contains( 'is-accent' ) ).toBe( false );
+    } );
+} );
+
 describe( 'the form', () => {
     test( 'holds the amounts, the fields, the button and the meta line', () => {
         const form = mount().querySelector( '.gratora-style-preview__form' );

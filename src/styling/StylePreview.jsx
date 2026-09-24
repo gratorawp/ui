@@ -68,7 +68,7 @@ export default function StylePreview( {
 
                 <div className="gratora-style-preview__page">
                     <div
-                        className="gratora-style-preview__hero"
+                        className={ `gratora-style-preview__hero ${ imageUrl ? 'is-photo' : 'is-accent' }` }
                         style={ imageUrl ? { backgroundImage: `url(${ imageUrl })` } : undefined }
                     >
                         <div className="gratora-style-preview__hero-title">{ title }</div>
