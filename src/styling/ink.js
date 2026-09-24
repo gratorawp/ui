@@ -187,10 +187,16 @@ export function mix( a, b, share ) {
     } ).join( '' );
 }
 
+/** Whether ink reaches 4.5:1 on a ground. An unreadable colour does not. */
+function carries( ink, ground ) {
+    const r = ratio( ink, ground );
+    return r !== null && r >= 4.5;
+}
+
 /**
  * The properties Ink.php derives and emits alongside the authored map, keyed
- * the way a style attribute wants them. A ground it cannot read contributes
- * nothing, so the stylesheet's own fallback stands.
+ * the way a style attribute wants them. A ground it cannot read contributes no
+ * measured ink, so the stylesheet's own fallback stands.
  *
  * @param {Record<string,string>} tokens the authored map, without the leading --
  * @return {Record<string,string>} the derived properties, ready for a style attribute.
@@ -198,7 +204,9 @@ export function mix( a, b, share ) {
 export function derivedInk( tokens = {} ) {
     const out = {};
 
-    const accent = inkPair( tokens[ 'gratora-accent' ] );
+    const accentValue = tokens[ 'gratora-accent' ];
+
+    const accent = inkPair( accentValue );
     if ( accent ) {
         out[ '--gratora-on-accent' ] = accent[ 0 ];
         out[ '--gratora-on-accent-muted' ] = accent[ 1 ];
@@ -209,10 +217,7 @@ export function derivedInk( tokens = {} ) {
     if ( soft ) {
         out[ '--gratora-on-soft' ] = soft[ 0 ];
         out[ '--gratora-on-soft-muted' ] = soft[ 1 ];
-
-        const accentValue = tokens[ 'gratora-accent' ];
-        const carries = ratio( accentValue, tokens[ 'gratora-bg-soft' ] );
-        out[ '--gratora-on-soft-accent' ] = carries !== null && carries >= 4.5 ? accentValue : soft[ 0 ];
+        out[ '--gratora-on-soft-accent' ] = carries( accentValue, tokens[ 'gratora-bg-soft' ] ) ? accentValue : soft[ 0 ];
     }
 
     const field = inkPair( tokens[ 'gratora-field-bg' ] );
@@ -221,5 +226,27 @@ export function derivedInk( tokens = {} ) {
         out[ '--gratora-on-field-muted' ] = field[ 1 ];
     }
 
-    return out;
+    return { ...out, ...groundInk( tokens ) };
+}
+
+/**
+ * Ink for the card and the selected tint, and the accent as page text. The
+ * page's colour is not known, so the accent is measured against the ground the
+ * page ink was chosen for: white under dark ink, dark under light.
+ */
+function groundInk( tokens ) {
+    const text   = tokens[ 'gratora-text' ];
+    const quiet  = tokens[ 'gratora-text-muted' ];
+    const accent = tokens[ 'gratora-accent' ];
+    const card   = tokens[ 'gratora-bg' ];
+    const tint   = tokens[ 'gratora-accent-soft' ] || mix( accent, card, 0.12 );
+    const onCard = inkPair( card );
+
+    return {
+        '--gratora-text-accent':    carries( accent, inkOn( text ) ) ? 'var(--gratora-accent)' : 'var(--gratora-text)',
+        '--gratora-on-bg':          carries( text, card ) || ! onCard ? 'var(--gratora-text)' : onCard[ 0 ],
+        '--gratora-on-bg-muted':    carries( quiet, card ) || ! onCard ? 'var(--gratora-text-muted)' : onCard[ 1 ],
+        '--gratora-on-bg-accent':   carries( accent, card ) ? 'var(--gratora-accent)' : 'var(--gratora-on-bg)',
+        '--gratora-on-accent-soft': carries( accent, tint ) ? 'var(--gratora-accent)' : ( inkOn( tint ) ?? 'var(--gratora-accent)' ),
+    };
 }

@@ -3,7 +3,7 @@
  * here is the one InkTest pins on the PHP side.
  */
 
-import { rgb, ratio, inkPair, mix } from '../src/styling/ink';
+import { rgb, ratio, inkPair, mix, derivedInk } from '../src/styling/ink';
 
 const hex = ( channels ) => '#' + channels.map( ( c ) => c.toString( 16 ).padStart( 2, '0' ) ).join( '' );
 
@@ -67,6 +67,100 @@ test( 'mixes the way color-mix in srgb paints', () => {
     expect( mix( '#ffee58', '#ffffff', 0.12 ) ).toBe( '#fffdeb' );
     expect( mix( '#452ef5', '#804242', 0.12 ) ).toBe( '#794057' );
     expect( mix( 'inherit', '#ffffff', 0.12 ) ).toBeNull();
+} );
+
+describe( 'ink for each ground', () => {
+    const SHIPPED = {
+        'gratora-accent':      '#211d3f',
+        'gratora-accent-soft': '#efedf8',
+        'gratora-text':        '#111827',
+        'gratora-text-muted':  '#6b7280',
+        'gratora-bg':          '#ffffff',
+        'gratora-field-bg':    '#ffffff',
+        'gratora-bg-soft':     '#f8fafb',
+    };
+
+    const QA = {
+        ...SHIPPED,
+        'gratora-accent':  '#fde68a',
+        'gratora-bg':      '#15142b',
+        'gratora-bg-soft': '#221f3d',
+        'gratora-border':  '#3a3660',
+    };
+    delete QA[ 'gratora-accent-soft' ];
+
+    const GROUND_KEYS = [
+        '--gratora-text-accent',
+        '--gratora-on-bg',
+        '--gratora-on-bg-muted',
+        '--gratora-on-bg-accent',
+        '--gratora-on-accent-soft',
+    ];
+
+    const grounds = ( tokens ) => {
+        const out = derivedInk( tokens );
+        return Object.fromEntries( GROUND_KEYS.map( ( k ) => [ k, out[ k ] ] ) );
+    };
+
+    test( 'QA Dark Pale', () => {
+        expect( grounds( QA ) ).toEqual( {
+            '--gratora-text-accent':   'var(--gratora-text)',
+            '--gratora-on-bg':         '#ffffff',
+            '--gratora-on-bg-muted':   'rgba(255,255,255,.72)',
+            '--gratora-on-bg-accent':  'var(--gratora-accent)',
+            '--gratora-on-accent-soft': 'var(--gratora-accent)',
+        } );
+    } );
+
+    test( 'the shipped brand names only what the page already paints', () => {
+        expect( grounds( SHIPPED ) ).toEqual( {
+            '--gratora-text-accent':   'var(--gratora-accent)',
+            '--gratora-on-bg':         'var(--gratora-text)',
+            '--gratora-on-bg-muted':   'var(--gratora-text-muted)',
+            '--gratora-on-bg-accent':  'var(--gratora-accent)',
+            '--gratora-on-accent-soft': 'var(--gratora-accent)',
+        } );
+    } );
+
+    test( 'chosen ink stays on a card it reads on, and measured muted takes over where it does not', () => {
+        const out = grounds( { ...SHIPPED, 'gratora-accent': '#0f3d5c', 'gratora-bg': '#f55151' } );
+
+        expect( out[ '--gratora-on-bg' ] ).toBe( 'var(--gratora-text)' );
+        expect( out[ '--gratora-on-bg-muted' ] ).toBe( 'rgba(16,22,42,.86)' );
+    } );
+
+    test( 'a pale accent on its own tint takes measured ink', () => {
+        const site = { ...SHIPPED, 'gratora-accent': '#ffee58' };
+        delete site[ 'gratora-accent-soft' ];
+
+        expect( grounds( site )[ '--gratora-on-accent-soft' ] ).toBe( '#10162a' );
+    } );
+
+    test( 'a mid accent on a tinted card takes white', () => {
+        const classic = { ...SHIPPED, 'gratora-accent': '#452ef5', 'gratora-bg': '#804242' };
+        delete classic[ 'gratora-accent-soft' ];
+
+        expect( grounds( classic )[ '--gratora-on-accent-soft' ] ).toBe( '#ffffff' );
+    } );
+
+    test( 'a tint the map states is the one measured', () => {
+        const out = grounds( { ...SHIPPED, 'gratora-accent': '#ffee58', 'gratora-accent-soft': '#211d3f' } );
+
+        expect( out[ '--gratora-on-accent-soft' ] ).toBe( 'var(--gratora-accent)' );
+    } );
+
+    test( 'the accent stands down to the card ink where it does not read on the card', () => {
+        const out = grounds( { ...SHIPPED, 'gratora-accent': '#0f3d5c', 'gratora-bg': '#15142b' } );
+
+        expect( out[ '--gratora-on-bg-accent' ] ).toBe( 'var(--gratora-on-bg)' );
+    } );
+
+    test( 'the accent as page text is measured against the ground the page ink reads on', () => {
+        expect( grounds( { ...SHIPPED, 'gratora-text': '#ffffff', 'gratora-accent': '#fde68a' } )[ '--gratora-text-accent' ] )
+            .toBe( 'var(--gratora-accent)' );
+        expect( grounds( { ...SHIPPED, 'gratora-accent': '#fde68a' } )[ '--gratora-text-accent' ] )
+            .toBe( 'var(--gratora-text)' );
+    } );
 } );
 
 describe( 'hsl hue units', () => {
