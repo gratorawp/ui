@@ -314,6 +314,26 @@ describe( 'the keyboard ring', () => {
     } );
 } );
 
+/** A hovered button's ink, as Ink::hoverDeclarations emits it. */
+describe( 'the hovered button', () => {
+    test.each( [
+        [ { 'gratora-accent': '#211d3f' }, 'var(--gratora-on-accent)' ],
+        [ { 'gratora-accent': '#fde68a' }, 'var(--gratora-on-accent)' ],
+        [ { 'gratora-accent': '#f55151' }, '#ffffff' ],
+        [ { 'gratora-accent': '#111827', 'gratora-button-bg': 'transparent', 'gratora-button-fg': '#111827', 'gratora-button-hover-bg': '#f3f4f6' }, 'var(--gratora-button-fg)' ],
+        [ { 'gratora-accent': '#f55151', 'gratora-button-fg': '#10162a' }, '#ffffff' ],
+        [ { 'gratora-accent': '#211d3f', 'gratora-button-bg': '#fef9c3' }, '#10162a' ],
+        [ { 'gratora-accent': '#211d3f', 'gratora-button-hover-bg': '#fde68a' }, '#10162a' ],
+    ] )( 'on %o takes %s', ( tokens, ink ) => {
+        expect( derivedInk( tokens )[ '--gratora-on-button-hover' ] ).toBe( ink );
+    } );
+
+    test( 'measures nothing on a fill it cannot read', () => {
+        expect( derivedInk( { 'gratora-accent': 'inherit' } ) ).not.toHaveProperty( '--gratora-on-button-hover' );
+        expect( derivedInk( { 'gratora-accent': '#211d3f', 'gratora-button-bg': 'transparent' } ) ).not.toHaveProperty( '--gratora-on-button-hover' );
+    } );
+} );
+
 /** The required marker on the page and on the card, as Ink::requiredDeclarations emits it. */
 describe( 'the required marker', () => {
     const PAGE_INK = { 'gratora-text': '#111827', 'gratora-text-muted': '#6b7280' };

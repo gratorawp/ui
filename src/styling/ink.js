@@ -281,7 +281,7 @@ export function derivedInk( tokens = {} ) {
         out[ '--gratora-on-field-muted' ] = field[ 1 ];
     }
 
-    return { ...out, ...groundInk( tokens ), ...ringInk( tokens ), ...requiredInk( tokens ) };
+    return { ...out, ...groundInk( tokens ), ...ringInk( tokens ), ...hoverInk( tokens ), ...requiredInk( tokens ) };
 }
 
 /**
@@ -325,6 +325,25 @@ function ringInk( tokens ) {
         `--gratora-${ name }`,
         ring !== '' && carries( ring, ground ) ? 'var(--gratora-focus-ring)' : own,
     ] ) );
+}
+
+/**
+ * Ink for a hovered button, which paints the hover colour the org chose or else
+ * its own fill darkened to 78%: the button's ink where it still reads there,
+ * measured ink where it does not. A fill it cannot read measures nothing.
+ */
+function hoverInk( tokens ) {
+    const fill = tokens[ 'gratora-button-bg' ] || tokens[ 'gratora-accent' ];
+    const hover = tokens[ 'gratora-button-hover-bg' ] || mix( fill, '#000000', 0.78 );
+    const on = inkOn( hover );
+    if ( ! on ) return {};
+
+    const chosen = tokens[ 'gratora-button-fg' ] || '';
+    const [ ink, name ] = chosen !== ''
+        ? [ chosen, 'var(--gratora-button-fg)' ]
+        : [ inkOn( tokens[ 'gratora-accent' ] ), 'var(--gratora-on-accent)' ];
+
+    return { '--gratora-on-button-hover': carries( ink, hover ) ? name : on };
 }
 
 /** The required marker's colour, as --gratora-required ships it. */
