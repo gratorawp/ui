@@ -42,6 +42,11 @@ export default function TokenEditor( {
         }
     };
 
+    // A control that reports the value it already holds is not an edit.
+    const report = ( out ) => {
+        if ( ! sameMap( out, value ) ) onChange( out );
+    };
+
     const setToken = ( key, next, def ) => {
         const out = { ...value };
         if ( next === '' || next == null || same( next, defaults[ key ], def ) ) {
@@ -49,13 +54,13 @@ export default function TokenEditor( {
         } else {
             out[ key ] = String( next );
         }
-        onChange( out );
+        report( out );
     };
 
     const resetToken = ( key ) => {
         const out = { ...value };
         clearToken( out, key );
-        onChange( out );
+        report( out );
     };
 
     return (
@@ -92,6 +97,12 @@ function same( a, b, def ) {
     if ( def?.control !== 'color' ) return a === b;
 
     return String( a ?? '' ).toLowerCase() === String( b ?? '' ).toLowerCase();
+}
+
+function sameMap( a, b ) {
+    const keys = Object.keys( a );
+
+    return keys.length === Object.keys( b ).length && keys.every( ( k ) => k in b && a[ k ] === b[ k ] );
 }
 
 function TokenRow( { tokenKey, def, current, isOverridden, onChange, onReset } ) {

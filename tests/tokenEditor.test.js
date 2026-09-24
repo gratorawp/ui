@@ -1,7 +1,7 @@
 /**
  * A colour row offered a clear button whenever it showed a colour, so a row
  * showing the value it inherits, or the one its built-in ships, offered a
- * control that changed nothing.
+ * control that changed nothing and still reported a change.
  */
 
 import { act } from 'react';
@@ -100,6 +100,27 @@ test( 'on a campaign only the override offers to clear, and clearing it leaves n
 
     draw( editor( { ...props, value: seen[ 0 ] } ) );
     expect( clears() ).toHaveLength( 0 );
+} );
+
+describe( 'a colour control that reports the value its row holds', () => {
+    test.each( [
+        [ 'inherited', {} ],
+        [ 'overridden', { 'gratora-accent': '#ff0000' } ],
+        [ 'shipped', { 'gratora-accent': '#0F3D5C' }, { 'gratora-accent': '#0F3D5C' } ],
+    ] )( 'reports no change on a row that is %s', ( _, value, base = {} ) => {
+        const seen = [];
+
+        draw( editor( {
+            value,
+            base,
+            defaults: { 'gratora-accent': '#fde68a', 'gratora-text': '#111827', 'gratora-button-bg': '' },
+            onChange: ( v ) => seen.push( v ),
+        } ) );
+
+        click( row( 'Accent' ).querySelector( '.picker-same' ) );
+
+        expect( seen ).toEqual( [] );
+    } );
 } );
 
 test( 'a real change is still reported', () => {
