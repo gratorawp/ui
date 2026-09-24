@@ -9,6 +9,9 @@
  * token map with the derived inks stripped out of it. The consuming plugin's
  * brandContrastAgreement.test.js keeps them all the same.
  *
+ * A translucent ground is read as it lands on white, the page the shipped ink
+ * is chosen for; translucent ink is read over the ground it is on.
+ *
  * Import nothing here: the public donation-form bundle depends on this module.
  */
 
@@ -17,35 +20,61 @@ const FLIP = 0.1791;
 const ON_DARK  = '#ffffff';
 const ON_LIGHT = '#10162a';
 
-/** @return {[number,number,number]|null} the channels, or null when the value cannot be read. */
+/** @return {[number,number,number]|null} the colour as it lands on white, or null when the value cannot be read. */
 export function rgb( value ) {
+    const c = rgba( value );
+    return c ? over( c, [ 255, 255, 255 ] ) : null;
+}
+
+/** A colour, translucent or not, painted over an opaque one. */
+function over( [ r, g, b, a ], under ) {
+    return a >= 1 ? [ r, g, b ] : blend( [ r, g, b ], under, a );
+}
+
+/** @return {[number,number,number,number]|null} the channels and the alpha, or null when the value cannot be read. */
+function rgba( value ) {
     const v = String( value ?? '' ).trim();
 
     const hex = v.match( /^#([0-9a-fA-F]{3,8})$/ );
     if ( hex ) {
         let h = hex[ 1 ];
+        let a = 1;
+        if ( h.length === 4 ) a = parseInt( h[ 3 ] + h[ 3 ], 16 ) / 255;
+        if ( h.length === 8 ) a = parseInt( h.slice( 6, 8 ), 16 ) / 255;
         if ( h.length === 3 || h.length === 4 ) h = h[ 0 ] + h[ 0 ] + h[ 1 ] + h[ 1 ] + h[ 2 ] + h[ 2 ];
         if ( h.length < 6 ) return null;
 
-        return [ parseInt( h.slice( 0, 2 ), 16 ), parseInt( h.slice( 2, 4 ), 16 ), parseInt( h.slice( 4, 6 ), 16 ) ];
+        return [ parseInt( h.slice( 0, 2 ), 16 ), parseInt( h.slice( 2, 4 ), 16 ), parseInt( h.slice( 4, 6 ), 16 ), a ];
     }
 
     if ( /^hsla?\(/i.test( v ) ) return HSL.test( v ) ? fromHsl( v.slice( v.indexOf( '(' ) + 1, -1 ) ) : null;
 
     const fn = v.match( /^rgba?\(([^)]*)\)$/i );
     if ( fn ) {
-        const parts = fn[ 1 ].split( /[\s,/]+/ ).filter( Boolean ).slice( 0, 3 );
+        const parts = fn[ 1 ].split( /[\s,/]+/ ).filter( Boolean );
         if ( parts.length < 3 ) return null;
-        const out = parts.map( ( p ) => {
+        const out = parts.slice( 0, 3 ).map( ( p ) => {
             const n = parseFloat( p );
             if ( Number.isNaN( n ) ) return null;
             return channel( p.includes( '%' ) ? n * 2.55 : n );
         } );
+        const a = alpha( parts[ 3 ] );
 
-        return out.some( ( n ) => n === null ) ? null : out;
+        return out.some( ( n ) => n === null ) || a === null ? null : [ ...out, a ];
     }
 
     return null;
+}
+
+/** Opacity from 0 to 1, or null when the bit is not one. */
+function alpha( bit ) {
+    if ( bit === undefined ) return 1;
+    if ( bit.toLowerCase() === 'none' ) return 0;
+
+    const n = Number( bit.endsWith( '%' ) ? bit.slice( 0, -1 ) : bit );
+    if ( bit === '' || Number.isNaN( n ) ) return null;
+
+    return Math.max( 0, Math.min( 1, bit.endsWith( '%' ) ? n / 100 : n ) );
 }
 
 /** PHP's round() corrects representation error before it rounds; Math.round does not. */
@@ -74,13 +103,14 @@ const PER_DEGREE = { deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 };
  * nothing can read leaves every derived ink at its stylesheet fallback.
  */
 function fromHsl( parts ) {
-    const bits = parts.split( /[\s,/]+/ ).filter( Boolean ).slice( 0, 3 );
+    const bits = parts.split( /[\s,/]+/ ).filter( Boolean );
     if ( bits.length < 3 ) return null;
 
     const hue = angle( bits[ 0 ] );
     const sat = percent( bits[ 1 ] );
     const light = percent( bits[ 2 ] );
-    if ( hue === null || sat === null || light === null ) return null;
+    const a = alpha( bits[ 3 ] );
+    if ( hue === null || sat === null || light === null || a === null ) return null;
 
     let h = hue % 360;
     if ( h < 0 ) h += 360;
@@ -92,9 +122,12 @@ function fromHsl( parts ) {
     const m = l - c / 2;
 
     return [
-        [ c, x, 0 ], [ x, c, 0 ], [ 0, c, x ],
-        [ 0, x, c ], [ x, 0, c ], [ c, 0, x ],
-    ][ Math.floor( h / 60 ) % 6 ].map( ( n ) => channel( ( n + m ) * 255 ) );
+        ...[
+            [ c, x, 0 ], [ x, c, 0 ], [ 0, c, x ],
+            [ 0, x, c ], [ x, 0, c ], [ c, 0, x ],
+        ][ Math.floor( h / 60 ) % 6 ].map( ( n ) => channel( ( n + m ) * 255 ) ),
+        a,
+    ];
 }
 
 /** Degrees, or null. */
@@ -116,15 +149,19 @@ function percent( bit ) {
 
 export function luminance( value ) {
     const c = rgb( value );
-    if ( ! c ) return null;
+    return c ? lum( c ) : null;
+}
 
-    const [ r, g, b ] = c.map( ( raw ) => {
+function lum( channels ) {
+    const [ r, g, b ] = channels.map( ( raw ) => {
         const x = Math.max( 0, Math.min( 255, raw ) ) / 255;
         return x <= 0.03928 ? x / 12.92 : Math.pow( ( x + 0.055 ) / 1.055, 2.4 );
     } );
 
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
+
+const contrast = ( a, b ) => ( Math.max( lum( a ), lum( b ) ) + 0.05 ) / ( Math.min( lum( a ), lum( b ) ) + 0.05 );
 
 /** The ink the server will draw on this ground, or null when it cannot read it. */
 export function inkOn( ground ) {
@@ -187,19 +224,25 @@ const clamp = ( n ) => Math.max( 0, Math.min( 255, n ) );
  * colour cannot be read. The share is a's part, from 0 to 1.
  */
 export function mix( a, b, share ) {
-    const x = rgb( a );
+    const x = rgba( a );
     const y = rgb( b );
     if ( ! x || ! y ) return null;
 
-    return hexOf( x.map( ( c, i ) => channel( share * clamp( c ) + ( 1 - share ) * clamp( y[ i ] ) ) ) );
+    return hexOf( blend( over( x, y ), y, share ) );
+}
+
+function blend( a, b, share ) {
+    return a.map( ( c, i ) => channel( share * clamp( c ) + ( 1 - share ) * clamp( b[ i ] ) ) );
 }
 
 const hexOf = ( channels ) => '#' + channels.map( ( n ) => clamp( n ).toString( 16 ).padStart( 2, '0' ) ).join( '' );
 
-/** Whether ink reaches 4.5:1 on a ground. An unreadable colour does not. */
+/** Whether ink, as it paints over the ground, reaches 4.5:1 there. An unreadable colour does not. */
 function carries( ink, ground ) {
-    const r = ratio( ink, ground );
-    return r !== null && r >= 4.5;
+    const i = rgba( ink );
+    const g = rgb( ground );
+
+    return !! i && !! g && contrast( over( i, g ), g ) >= 4.5;
 }
 
 /**
@@ -267,16 +310,21 @@ const REQUIRED = '#d63384';
 const REQUIRED_FROM = 72;
 
 /**
- * The marker mixed toward the ink at the largest share, from the shipped one
- * down, that reaches 4.5:1 on the ground. Where none does, the ink.
+ * The marker mixed toward the ink, as it paints over the ground, at the largest
+ * share from the shipped one down that reaches 4.5:1 there. Where none does,
+ * the ink.
  */
 function marker( ink, ground ) {
+    const g = rgb( ground );
+    const i = over( rgba( ink ), g );
+    const red = rgb( REQUIRED );
+
     for ( let n = REQUIRED_FROM; n > 0; n-- ) {
-        const mixed = mix( REQUIRED, ink, n / 100 );
-        if ( carries( mixed, ground ) ) return mixed;
+        const mixed = blend( red, i, n / 100 );
+        if ( contrast( mixed, g ) >= 4.5 ) return hexOf( mixed );
     }
 
-    return hexOf( rgb( ink ) );
+    return hexOf( i );
 }
 
 /**

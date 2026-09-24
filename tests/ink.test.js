@@ -3,7 +3,7 @@
  * here is the one InkTest pins on the PHP side.
  */
 
-import { rgb, ratio, inkPair, mix, derivedInk } from '../src/styling/ink';
+import { rgb, ratio, inkOn, inkPair, mix, derivedInk } from '../src/styling/ink';
 
 const hex = ( channels ) => '#' + channels.map( ( c ) => c.toString( 16 ).padStart( 2, '0' ) ).join( '' );
 
@@ -204,9 +204,38 @@ describe( 'hsl hue units', () => {
     test.each( [
         'hsl(160deg 60% 80% / 1)',
         'hsl(160, 60%, 80%, 100%)',
-        'hsla(160deg 60% 80% / none)',
+        'hsla(160deg 60% 80% / 100%)',
     ] )( '%s is a colour', ( value ) => {
         expect( rgb( value ) ).toEqual( [ 173, 235, 214 ] );
+    } );
+} );
+
+/** Ink.php reads a translucent ground as it lands on white, and translucent ink over its ground. */
+describe( 'translucent colours', () => {
+    test( 'a ground is read as it lands on white', () => {
+        expect( rgb( '#10162a26' ) ).toEqual( [ 219, 220, 223 ] );
+        expect( rgb( 'hsla(280, 50%, 40%, .5)' ) ).toEqual( [ 187, 153, 204 ] );
+        expect( rgb( 'hsl(280 50% 40% / 50%)' ) ).toEqual( [ 187, 153, 204 ] );
+        expect( inkOn( 'rgba(33, 29, 63, 0.12)' ) ).toBe( '#10162a' );
+        expect( inkOn( '#0000001a' ) ).toBe( '#10162a' );
+    } );
+
+    test( 'a faint accent is neither page text nor card text', () => {
+        const out = derivedInk( {
+            'gratora-accent':     'rgba(16,22,42,.15)',
+            'gratora-text':       '#111827',
+            'gratora-text-muted': '#6b7280',
+            'gratora-bg':         '#ffffff',
+            'gratora-bg-soft':    '#f8fafb',
+        } );
+
+        expect( out[ '--gratora-text-accent' ] ).toBe( 'var(--gratora-text)' );
+        expect( out[ '--gratora-on-bg-accent' ] ).toBe( 'var(--gratora-on-bg)' );
+        expect( out[ '--gratora-on-soft-accent' ] ).toBe( '#10162a' );
+    } );
+
+    test( 'a translucent colour mixes as it lies on the other', () => {
+        expect( mix( 'rgba(253,230,138,.5)', '#15142b', 0.12 ) ).toBe( mix( mix( '#fde68a', '#15142b', 0.5 ), '#15142b', 0.12 ) );
     } );
 } );
 
