@@ -9,13 +9,22 @@
     height: 20px;
     flex-shrink: 0;
     cursor: pointer;
+    isolation: isolate; // keeps the input's z-index inside the switch
 
     // Invisible, not removed, so Tab still reaches it and Space toggles it.
+    // It covers the track and sits above it, so a pointer lands on it too.
+    // The size is explicit because wp-admin gives every checkbox 1rem.
     input {
         position: absolute;
         inset: 0;
+        z-index: 1;
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        height: 100%;
         margin: 0;
         opacity: 0;
+        appearance: none;
         cursor: inherit;
     }
 
