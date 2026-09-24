@@ -1,6 +1,6 @@
 {
   "name": "@gratora/ui",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Gratora design system: shared admin UI components, tokens, and widgets.",
   "license": "GPL-2.0-or-later",
   "repository": {
