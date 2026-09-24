@@ -15,8 +15,6 @@
  * Import nothing here: the public donation-form bundle depends on this module.
  */
 
-const FLIP = 0.1791;
-
 const ON_DARK  = '#ffffff';
 const ON_LIGHT = '#10162a';
 
@@ -163,10 +161,15 @@ function lum( channels ) {
 
 const contrast = ( a, b ) => ( Math.max( lum( a ), lum( b ) ) + 0.05 ) / ( Math.min( lum( a ), lum( b ) ) + 0.05 );
 
-/** The ink the server will draw on this ground, or null when it cannot read it. */
+/**
+ * The ink the server will draw on this ground, or null when it cannot read it:
+ * white or the dark ink, whichever reaches the higher contrast there.
+ */
 export function inkOn( ground ) {
-    const l = luminance( ground );
-    return l === null ? null : ( l > FLIP ? ON_LIGHT : ON_DARK );
+    const g = rgb( ground );
+    if ( ! g ) return null;
+
+    return contrast( rgb( ON_DARK ), g ) >= contrast( rgb( ON_LIGHT ), g ) ? ON_DARK : ON_LIGHT;
 }
 
 /** WCAG contrast, or null when either colour cannot be read. */

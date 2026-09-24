@@ -3,7 +3,7 @@
  * here is the one InkTest pins on the PHP side.
  */
 
-import { rgb, ratio, inkOn, inkPair, mix, derivedInk } from '../src/styling/ink';
+import { rgb, ratio, inkOn, inkPair, mix, bestOn, derivedInk } from '../src/styling/ink';
 
 const hex = ( channels ) => '#' + channels.map( ( c ) => c.toString( 16 ).padStart( 2, '0' ) ).join( '' );
 
@@ -18,6 +18,39 @@ function composite( ink, ground ) {
     return hex( [ 1, 2, 3 ].map( ( i, at ) => Math.round( a * Number( m[ i ] ) + ( 1 - a ) * g[ at ] ) ) );
 }
 
+/** White or the dark ink, whichever reads better: the two cross where each reaches the same contrast, not where black and white do. */
+describe( 'the ink a ground takes', () => {
+    test.each( [
+        [ '#0072f0', 4.50 ],
+        [ '#006ffa', 4.51 ],
+        [ '#767676', 4.54 ],
+        [ '#777777', 4.48 ],
+        [ '#ed1212', 4.47 ],
+    ] )( 'is white on %s, where white reaches %s and the dark ink under 4.1', ( ground, reaches ) => {
+        expect( inkOn( ground ) ).toBe( '#ffffff' );
+        expect( bestOn( ground ) ).toBeCloseTo( reaches, 2 );
+        expect( ratio( '#10162a', ground ) ).toBeLessThan( 4.1 );
+    } );
+
+    test( 'reads at least as well as the other on every grey', () => {
+        const worse = [];
+
+        for ( let v = 0; v <= 255; v++ ) {
+            const ground = hex( [ v, v, v ] );
+            const other = inkOn( ground ) === '#ffffff' ? '#10162a' : '#ffffff';
+
+            if ( bestOn( ground ) < ratio( other, ground ) ) worse.push( ground );
+        }
+
+        expect( worse ).toEqual( [] );
+    } );
+
+    test( 'is dark where the dark ink reads better', () => {
+        expect( inkOn( '#7b7b7b' ) ).toBe( '#10162a' );
+        expect( inkOn( '#f55151' ) ).toBe( '#10162a' );
+    } );
+} );
+
 describe( 'muted ink', () => {
     test.each( [
         [ '#ffffff', 'rgba(16,22,42,.62)' ],
@@ -27,8 +60,8 @@ describe( 'muted ink', () => {
         [ '#f55151', 'rgba(16,22,42,.86)' ],
         [ '#452ef5', 'rgba(255,255,255,.74)' ],
         [ '#2563eb', 'rgba(255,255,255,.91)' ],
-        [ '#ed1212', '#10162a' ],
-        [ '#777777', '#10162a' ],
+        [ '#ed1212', '#ffffff' ],
+        [ '#777777', '#ffffff' ],
     ] )( 'on %s is %s', ( ground, muted ) => {
         expect( inkPair( ground )[ 1 ] ).toBe( muted );
     } );
