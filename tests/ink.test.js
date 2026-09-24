@@ -186,6 +186,28 @@ describe( 'hsl hue units', () => {
         expect( rgb( 'hsl(1.2.3, 50%, 50%)' ) ).toBeNull();
         expect( rgb( 'hsl(d 60% 80%)' ) ).toBeNull();
     } );
+
+    /** CSS drops these, and so does Ink.php, so the preview measures none of them. */
+    test.each( [
+        'hsl(160 deg 60% 80%)',
+        'hsl(deg)',
+        'hsl(160degdeg 60% 80%)',
+        'hsl(160 60% 80% 90%)',
+        'hsl(none, 60%, 80%)',
+        'hsl(160deg, 60% 80%)',
+        'hsl(160, 60, 80)',
+        'hsl(160 60% 80% / .5 / .5)',
+    ] )( '%s is no colour', ( value ) => {
+        expect( rgb( value ) ).toBeNull();
+    } );
+
+    test.each( [
+        'hsl(160deg 60% 80% / 1)',
+        'hsl(160, 60%, 80%, 100%)',
+        'hsla(160deg 60% 80% / none)',
+    ] )( '%s is a colour', ( value ) => {
+        expect( rgb( value ) ).toEqual( [ 173, 235, 214 ] );
+    } );
 } );
 
 /** The required marker on the page and on the card, as Ink::requiredDeclarations emits it. */

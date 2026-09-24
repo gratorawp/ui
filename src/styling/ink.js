@@ -30,8 +30,7 @@ export function rgb( value ) {
         return [ parseInt( h.slice( 0, 2 ), 16 ), parseInt( h.slice( 2, 4 ), 16 ), parseInt( h.slice( 4, 6 ), 16 ) ];
     }
 
-    const hsl = v.match( /^hsla?\(([^)]*)\)$/i );
-    if ( hsl ) return fromHsl( hsl[ 1 ] );
+    if ( /^hsla?\(/i.test( v ) ) return HSL.test( v ) ? fromHsl( v.slice( v.indexOf( '(' ) + 1, -1 ) ) : null;
 
     const fn = v.match( /^rgba?\(([^)]*)\)$/i );
     if ( fn ) {
@@ -55,6 +54,17 @@ function channel( n ) {
 }
 
 const NUMBER = '[+-]?(?:\\d+\\.?\\d*|\\.\\d+)';
+const ANGLE = `${ NUMBER }(?:deg|grad|rad|turn)?`;
+
+/**
+ * An hsl() CSS parses: the space form, where any slot may be none and an alpha
+ * may follow a slash, or the comma form with percentages. Ink.php reads the same.
+ */
+const HSL = new RegExp(
+    `^hsla?\\(\\s*(?:(?:${ ANGLE }|none)\\s+(?:${ NUMBER }%|none)\\s+(?:${ NUMBER }%|none)(?:\\s*\\/\\s*(?:${ NUMBER }%?|none))?` +
+    `|${ ANGLE }\\s*,\\s*${ NUMBER }%\\s*,\\s*${ NUMBER }%(?:\\s*,\\s*${ NUMBER }%?)?)\\s*\\)$`,
+    'i'
+);
 const HUE = new RegExp( `^(${ NUMBER })(deg|grad|rad|turn)?$`, 'i' );
 const PERCENT = new RegExp( `^(${ NUMBER })%?$` );
 const PER_DEGREE = { deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 };
