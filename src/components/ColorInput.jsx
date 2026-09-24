@@ -1,6 +1,7 @@
 /**
  * Shared color input. Renders a swatch + hex label that opens the WP
- * ColorPicker in a popover when clicked, beside a button that empties it.
+ * ColorPicker in a popover when clicked, beside a button that clears it, when
+ * the caller says clearing changes something.
  */
 
 import { ColorPicker, Dropdown } from '@wordpress/components';
@@ -8,7 +9,7 @@ import { __, sprintf } from '@wordpress/i18n';
 
 import Icon from './Icon';
 
-export default function ColorInput( { value, onChange, label } ) {
+export default function ColorInput( { value, onChange, label, clearable = true } ) {
     const current = String( value || '' );
 
     return (
@@ -35,7 +36,7 @@ export default function ColorInput( { value, onChange, label } ) {
                             </span>
                         ) }
                     </button>
-                    { current && (
+                    { current && clearable && (
                         <button
                             type="button"
                             className="gratora-color__clear"

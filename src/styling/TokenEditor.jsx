@@ -115,6 +115,7 @@ function TokenRow( { tokenKey, def, current, isOverridden, onChange, onReset } )
                 tokenKey={ tokenKey }
                 def={ def }
                 value={ current }
+                clearable={ isOverridden }
                 onChange={ onChange }
             />
             { def.help && <p className="gratora-token-editor__help">{ def.help }</p> }
@@ -122,10 +123,10 @@ function TokenRow( { tokenKey, def, current, isOverridden, onChange, onReset } )
     );
 }
 
-function TokenControl( { def, value, onChange } ) {
+function TokenControl( { def, value, clearable, onChange } ) {
     switch ( def.control ) {
         case 'color':
-            return <ColorInput value={ value } onChange={ onChange } label={ def.label } />;
+            return <ColorInput value={ value } onChange={ onChange } label={ def.label } clearable={ clearable } />;
 
         case 'range': {
             const literal = String( value ?? '' ).trim();
