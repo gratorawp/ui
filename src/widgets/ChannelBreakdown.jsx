@@ -19,6 +19,8 @@ const CHANNEL_LABELS = {
     referral:      __( 'Referral', 'gratora-fundraising-campaigns' ),
     qr:            __( 'QR / In-person', 'gratora-fundraising-campaigns' ),
     peer:          __( 'Peer-to-peer', 'gratora-fundraising-campaigns' ),
+    manual:        __( 'Manual entry', 'gratora-fundraising-campaigns' ),
+    embed:         __( 'Embedded form', 'gratora-fundraising-campaigns' ),
 };
 
 export default function ChannelBreakdown( { rows = [], currency } ) {

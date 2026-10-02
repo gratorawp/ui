@@ -14,8 +14,8 @@ import { formatAmount, parseTimestamp } from '../utils/format';
 import { derivedInk } from './ink';
 
 const SAMPLE_CAMPAIGN = {
-    title:        'Bring clean water to 1,000 villages',
-    description:  'Every donation funds a new well, reaching a family of six within a week. Together we can give whole villages safe water for the first time.',
+    title:        __( 'Bring clean water to 1,000 villages', 'gratora-fundraising-campaigns' ),
+    description:  __( 'Every donation funds a new well, reaching a family of six within a week. Together we can give whole villages safe water for the first time.', 'gratora-fundraising-campaigns' ),
     currency:     'USD',
     goal_cents:   5000000,
     raised_cents: 3050000,
