@@ -26,3 +26,12 @@ export const Row = {
     );
   },
 };
+
+export const Locked = {
+  render: () => (
+    <>
+      <ToggleRow title="Default fund" sub="Promote another fund to move it" checked disabled />
+      <ToggleRow title="Set a schedule" sub="The default fund stays open" checked={ false } disabled />
+    </>
+  ),
+};
